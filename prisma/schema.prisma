@@ -9,3 +9,53 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+enum Role {
+  Tutor
+  Student
+}
+
+model User {
+  id       Int    @id @default(autoincrement())
+  password String @db.VarChar(255)
+  nickname String @unique @db.VarChar(255)
+  role     Role
+
+  score Score[]
+}
+
+model Score {
+  id        Int      @id @default(autoincrement())
+  score     Int
+  createdAt DateTime
+  User      User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    Int?
+  Problem   Problem? @relation(fields: [problemId], references: [id], onDelete: Cascade)
+  problemId Int?
+}
+
+model Problem {
+  id    Int    @id @default(autoincrement())
+  title String @db.VarChar(255)
+  text  String @db.Text
+
+  score      Score[]
+  testCase   TestCase[]
+  hiddenCase HiddenCase[]
+}
+
+model TestCase {
+  id        Int      @id @default(autoincrement())
+  input     String   @db.Text
+  output    String   @db.Text
+  Problem   Problem? @relation(fields: [problemId], references: [id], onDelete: Cascade)
+  problemId Int?
+}
+
+model HiddenCase {
+  id        Int      @id @default(autoincrement())
+  input     String   @db.Text
+  output    String   @db.Text
+  Problem   Problem? @relation(fields: [problemId], references: [id], onDelete: Cascade)
+  problemId Int?
+}

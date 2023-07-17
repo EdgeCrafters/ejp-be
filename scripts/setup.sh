@@ -14,7 +14,7 @@ BASEDIR=$(dirname $(dirname $(realpath $0)))
 cd $BASEDIR
 
 # Generate env file
-echo "DATABASE_URL=\"postgresql://postgres:1234@localhost:5443/skku?schema=public\"" >> .env
+echo "DATABASE_URL=\"postgresql://postgres:1234@skku-ejs-dev-db:5432/skku?schema=public\"" >> .env
 
 # Install pnpm and Node.js packages
 npm install -g pnpm@latest
