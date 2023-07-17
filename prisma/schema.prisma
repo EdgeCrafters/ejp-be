@@ -17,21 +17,41 @@ enum Role {
 
 model User {
   id       Int    @id @default(autoincrement())
+  username String @unique @db.VarChar(255)
   password String @db.VarChar(255)
   nickname String @unique @db.VarChar(255)
   role     Role
+  otpKey   Int    @default(0)
 
-  score Score[]
+  score     Score[]
+  UserGroup UserRepo[]
+}
+
+model Repo {
+  id   Int    @id @default(autoincrement())
+  name String @db.VarChar(255)
+  url  String @db.VarChar(255)
+
+  Problem  Problem[]
+  UserRepo UserRepo[]
+}
+
+model UserRepo {
+  id     Int  @id @default(autoincrement())
+  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId Int
+  repo   Repo @relation(fields: [repoId], references: [id], onDelete: Cascade)
+  repoId Int
 }
 
 model Score {
   id        Int      @id @default(autoincrement())
   score     Int
   createdAt DateTime
-  User      User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId    Int?
-  Problem   Problem? @relation(fields: [problemId], references: [id], onDelete: Cascade)
-  problemId Int?
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    Int
+  problem   Problem  @relation(fields: [problemId], references: [id], onDelete: Cascade)
+  problemId Int
 }
 
 model Problem {
@@ -42,20 +62,22 @@ model Problem {
   score      Score[]
   testCase   TestCase[]
   hiddenCase HiddenCase[]
+  Repo       Repo         @relation(fields: [repoId], references: [id], onDelete: Cascade)
+  repoId     Int
 }
 
 model TestCase {
-  id        Int      @id @default(autoincrement())
-  input     String   @db.Text
-  output    String   @db.Text
-  Problem   Problem? @relation(fields: [problemId], references: [id], onDelete: Cascade)
-  problemId Int?
+  id        Int     @id @default(autoincrement())
+  input     String  @db.Text
+  output    String  @db.Text
+  Problem   Problem @relation(fields: [problemId], references: [id], onDelete: Cascade)
+  problemId Int
 }
 
 model HiddenCase {
-  id        Int      @id @default(autoincrement())
-  input     String   @db.Text
-  output    String   @db.Text
-  Problem   Problem? @relation(fields: [problemId], references: [id], onDelete: Cascade)
-  problemId Int?
+  id        Int     @id @default(autoincrement())
+  input     String  @db.Text
+  output    String  @db.Text
+  Problem   Problem @relation(fields: [problemId], references: [id], onDelete: Cascade)
+  problemId Int
 }
