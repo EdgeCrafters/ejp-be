@@ -3,26 +3,82 @@
     "colName": "REST API",
     "created": "2023-07-17T09:09:20.566Z",
     "sortNum": 10000,
-    "folders": [],
+    "folders": [
+        {
+            "_id": "f647db14-f0c2-45c2-b9e8-50d0b140be51",
+            "name": "AUTH",
+            "containerId": "",
+            "created": "2023-07-22T10:09:31.039Z",
+            "sortNum": 10000
+        }
+    ],
     "requests": [
         {
-            "_id": "98696d29-a26f-4523-bbe3-b8732a876245",
+            "_id": "ffada1f1-a124-463f-a2f4-56682c96d376",
             "colId": "2fe4be4c-377e-4cb2-a7f7-8ca6feb101fa",
-            "containerId": "",
-            "name": "test",
-            "url": "/",
-            "method": "GET",
-            "sortNum": 10000,
-            "created": "2023-07-17T09:15:12.507Z",
-            "modified": "2023-07-17T11:55:33.799Z",
+            "containerId": "f647db14-f0c2-45c2-b9e8-50d0b140be51",
+            "name": "login as tutor",
+            "url": "/auth/login",
+            "method": "POST",
+            "sortNum": 20000,
+            "created": "2023-07-22T10:09:38.039Z",
+            "modified": "2023-07-22T10:10:08.553Z",
             "headers": [],
             "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"username\": \"tutor01\",\n  \"password\": \"1234\"\n}",
+                "form": []
+            },
+            "tests": []
+        },
+        {
+            "_id": "e524d6f4-66ec-4e52-871f-53430fd64fee",
+            "colId": "2fe4be4c-377e-4cb2-a7f7-8ca6feb101fa",
+            "containerId": "f647db14-f0c2-45c2-b9e8-50d0b140be51",
+            "name": "logout",
+            "url": "/auth/logout",
+            "method": "POST",
+            "sortNum": 30000,
+            "created": "2023-07-22T10:19:03.945Z",
+            "modified": "2023-07-22T10:23:16.146Z",
+            "headers": [],
+            "params": [],
+            "tests": [],
+            "preReq": {
+                "runRequests": [
+                    {
+                        "reqId": "ffada1f1-a124-463f-a2f4-56682c96d376",
+                        "colId": "2fe4be4c-377e-4cb2-a7f7-8ca6feb101fa",
+                        "triggerCondition": "run-always",
+                        "triggerValue": ""
+                    }
+                ]
+            }
+        },
+        {
+            "_id": "a0d51671-f808-4319-8453-97540438ff2d",
+            "colId": "2fe4be4c-377e-4cb2-a7f7-8ca6feb101fa",
+            "containerId": "f647db14-f0c2-45c2-b9e8-50d0b140be51",
+            "name": "login as student",
+            "url": "/auth/login",
+            "method": "POST",
+            "sortNum": 25000,
+            "created": "2023-07-22T10:30:01.866Z",
+            "modified": "2023-07-22T10:30:27.892Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"username\": \"student01\",\n  \"password\": \"1234\"\n}",
+                "form": []
+            },
             "tests": []
         }
     ],
     "settings": {
         "options": {
-            "baseUrl": "http://localhost:3000"
+            "baseUrl": "http://localhost:4000"
         }
     }
 }
