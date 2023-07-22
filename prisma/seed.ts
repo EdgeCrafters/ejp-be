@@ -1,4 +1,5 @@
 import { type Prisma, PrismaClient, Role } from '@prisma/client'
+import { hash } from 'argon2'
 
 const prisma = new PrismaClient()
 
@@ -7,19 +8,19 @@ async function seed() {
     {
       username: 'tutor01',
       nickname: 'tutor01',
-      password: '1234',
+      password: await hash('1234'),
       role: Role.Tutor
     },
     {
       username: 'student01',
       nickname: 'student01',
-      password: '1234',
+      password: await hash('1234'),
       role: Role.Student
     },
     {
       username: 'student02',
       nickname: 'student02',
-      password: '1234',
+      password: await hash('1234'),
       role: Role.Student
     }
   ]

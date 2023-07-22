@@ -1,5 +1,10 @@
-import { Injectable, NotFoundException } from '@nestjs/common'
+import {
+  Injectable,
+  NotFoundException,
+  UnauthorizedException
+} from '@nestjs/common'
 import { Role } from '@prisma/client'
+import { verify } from 'argon2'
 import { PrismaService } from 'src/prisma/prisma.service'
 
 @Injectable()
@@ -9,19 +14,29 @@ export class AuthService {
   async validateUser(
     username: string,
     password: string
-  ): Promise<{ username: string; role: Role }> {
-    const user = await this.prisma.user.findFirst({
+  ): Promise<{ username: string }> {
+    const user = await this.prisma.user.findUnique({
       where: {
-        username,
-        password
+        username
       },
       select: {
-        username: true,
-        role: true
+        password: true
       }
     })
 
-    return user ? user : null
+    if (!user) {
+      throw new NotFoundException()
+    }
+
+    const valid = await this.verifyPassword(user.password, password)
+
+    if (!valid) {
+      throw new UnauthorizedException()
+    }
+
+    return {
+      username
+    }
   }
 
   async isTutor(username: string): Promise<boolean> {
@@ -54,5 +69,13 @@ export class AuthService {
     }
 
     return user
+  }
+
+  async verifyPassword(password: string, passwordInput: string) {
+    if (!(await verify(password, passwordInput))) {
+      return false
+    } else {
+      return true
+    }
   }
 }
