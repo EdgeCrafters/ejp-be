@@ -1,14 +1,13 @@
-import { ApiProperty } from '@nestjs/swagger';
 import { Score } from '@prisma/client';
 
 class ScoreDto {
   id: number
   score: number
-  createdAt: DateTime
+  createdAt: Date
 
-  constructor(id: number, score: number, createdAt: DateTime) {
-    this.id = id;
-    this.score = score;
+  constructor(id: number, score: number, createdAt: Date) {
+    this.id = id
+    this.score = score
     this.createdAt = createdAt
   }
 }
@@ -16,9 +15,9 @@ class ScoreDto {
 export class ScoreDtoBuilder {
    id: number
   score: number
-  createdAt: DateTime
+  createdAt: Date
 
-  setBoardInfo(score: Score) {
+  setScoreInfo(score: Score) {
     this.id = score.id;
     this.score = score.score;
     this.createdAt = score.createdAt
