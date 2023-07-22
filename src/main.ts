@@ -1,6 +1,6 @@
 import { NestFactory } from '@nestjs/core'
 import { AppModule } from './app.module'
-
+import { ConfigService } from '@nestjs/config'
 async function bootstrap() {
   const app = await NestFactory.create(AppModule)
   // GlobalPipes
@@ -18,9 +18,7 @@ async function bootstrap() {
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
   });
 
-
   const appConfig = app.get(ConfigService)
-
 
   console.log(`==== Running as ${process.env.APP_ENV} ====`);
   await app.listen(appConfig.get('app.port'));
