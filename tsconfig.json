@@ -20,5 +20,8 @@
   },
   "ts-node": {
     "swc": true
+  },
+  "paths": {
+    "@/*": ["src/*"]
   }
 }

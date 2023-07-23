@@ -4,10 +4,11 @@ import { PrismaService } from '../config/database/prisma.service'
 export class ReposService {
     constructor(private readonly prismaService : PrismaService){}
 
-    async getScoreList(user: any){
+    async getScoreList(id: number){
         const scores = await this.prismaService.score.findMany({
-            where: { userId: user.id }
+            // where: { userId: id }
         })
+        console.log({scores,})
         return scores
     }                //payload 확정되면 수정
 
