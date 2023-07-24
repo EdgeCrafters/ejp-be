@@ -46,21 +46,38 @@ export class ReposService {
   }
 
   //학생이 url 요청했을때, userrepo에 학생 등록
-  async getRepoUrl(id: number, body) {
+  async getRepoUrl(id: string, body) {
     const requestedUrl = await this.prismaService.repo.findUnique({
       where: {
         url: body.url
       }
     })
     if (!requestedUrl) return new BadRequestException('존재하지않는 url입니다')
-
+    const studentId = await this.prismaService.user.findUnique({
+      where: {
+        nickname: id
+      },
+      select: {
+        id: true
+      }
+    })
     const createNewUserRepo = await this.prismaService.userRepo.create({
       data: {
-        userId: id,
+        userId: studentId.id,
         repoId: requestedUrl.id
       }
     })
 
     return requestedUrl.url
+  }
+
+  async getRepos() {
+    const repos = await this.prismaService.repo.findMany({
+      select: {
+        name: true
+      }
+    })
+
+    return repos
   }
 }

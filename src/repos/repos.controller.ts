@@ -36,13 +36,14 @@ export class ReposController {
 
   //학생이 레포 url 요청
   @Roles(Role.Student)
-  @Get(':id')
-  async getRepoUrl(@Param('id', ParseIntPipe) id: number, @Body() body) {
+  @Get(':id') //repo이름
+  async getRepoUrl(@Param('id') id: string, @Body() body) {
     return await this.reposService.getRepoUrl(id, body)
   }
 
-  // @Get()
-  // async getRepos(){
-  //   return await this.reposService.getRepos()
-  // }
+  @Roles(Role.Student)
+  @Get()
+  async getRepos() {
+    return await this.reposService.getRepos()
+  }
 }
