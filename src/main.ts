@@ -14,15 +14,15 @@ async function bootstrap() {
   app.set('trust proxy', 1)
   app.useGlobalPipes(new ValidationPipe({ whitelist: true }))
   app.use(cookieParser())
-  // app.use(
-  //   session({
-  //     secret: configService.get<string>('SESSION_SECRET'),
-  //     resave: false,
-  //     saveUninitialized: false
-  //   })
-  // )
-  // app.use(passport.initialize())
-  // app.use(passport.session())
+  app.use(
+    session({
+      secret: configService.get<string>('SESSION_SECRET'),
+      resave: false,
+      saveUninitialized: false
+    })
+  )
+  app.use(passport.initialize())
+  app.use(passport.session())
   await app.listen(configService.get<number>('PORT'))
 }
 bootstrap()

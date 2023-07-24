@@ -6,8 +6,10 @@ import {
 import { PrismaService } from '../prisma/prisma.service'
 import * as nodegit from 'nodegit'
 import { Request } from 'express'
-import path from 'path'
-import fs from 'fs'
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const path = require('path')
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const fs = require('fs')
 
 @Injectable()
 export class ReposService {
@@ -50,7 +52,7 @@ export class ReposService {
         url: body.url
       }
     })
-    if (!requestedUrl) return new BadRequestException()
+    if (!requestedUrl) return new BadRequestException('존재하지않는 url입니다')
 
     const createNewUserRepo = await this.prismaService.userRepo.create({
       data: {
