@@ -10,24 +10,26 @@ export class ReposController {
   constructor(private readonly reposService: ReposService) {}
 
     //교수자만 가능
-  @Get(':id')
-  async getScores(@Param('id', ParseIntPipe) id: number) {
-    const scores = await this.reposService.getScoreList(id)
-        const contents = scores.map((score) => {
-      return new ScoreDtoBuilder().setScoreInfo(score).build()
-        })
+  // @Get(':id')
+  // async getScores(@Param('id', ParseIntPipe) id: number) {
+  //   const scores = await this.reposService.getScoreList(id)
+  //       const contents = scores.map((score) => {
+  //     return new ScoreDtoBuilder().setScoreInfo(score).build()
+  //       })
 
-        return new CommonResponseDto(new GetScoreListDto(contents))
-    }
+  //       return new CommonResponseDto(new GetScoreListDto(contents))
+  //   }
 
     //교수자만 가능
     @Post(':id')
     async createRepo(@Param('id') id: string) {
-        return newRepoUrl = await this.reposService.createNewRepo(id);
+        const newRepoUrl  = await this.reposService.createNewRepo(id);
+        return newRepoUrl
     }
 
-    @Post(':id')
-    async getRepo(@Param('id', ParseIntPipe) id: number, @Req() req) {
-
+    //학생이 레포 url 요청 
+    @Get(':id')
+    async getRepo(@Param('id', ParseIntPipe) id: number, @Body() body) {
+      return await this.reposService.getRepoUrl(id, body)
     }
 }
