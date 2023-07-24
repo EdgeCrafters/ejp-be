@@ -1,4 +1,4 @@
-import { Score } from '@prisma/client';
+import type { Score } from '@prisma/client'
 
 class ScoreDto {
   id: number
@@ -13,26 +13,26 @@ class ScoreDto {
 }
 
 export class ScoreDtoBuilder {
-   id: number
+  id: number
   score: number
   createdAt: Date
 
   setScoreInfo(score: Score) {
-    this.id = score.id;
-    this.score = score.score;
+    this.id = score.id
+    this.score = score.score
     this.createdAt = score.createdAt
-    return this;
+    return this
   }
 
   build() {
-    return new ScoreDto(this.id, this.score, this.createdAt);
+    return new ScoreDto(this.id, this.score, this.createdAt)
   }
 }
 
 export class GetScoreListDto {
-  scoreList: ScoreDto[];
+  scoreList: ScoreDto[]
 
   constructor(contents: ScoreDto[]) {
-    this.scoreList = [...contents];
+    this.scoreList = [...contents]
   }
 }

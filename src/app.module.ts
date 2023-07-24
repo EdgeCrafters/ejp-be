@@ -8,17 +8,19 @@ import { APP_GUARD } from '@nestjs/core'
 import { AuthenticatedGuard } from './auth/guard/authenticated.guard'
 import { RolesGuard } from './common/guard/roles.guard'
 import { ReposModule } from './repos/repos.module'
+import { ProbsModule } from './probs/probs.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
     PrismaModule,
     ReposModule,
+    ProbsModule
     //AuthModule
   ],
   controllers: [AppController],
   providers: [
-    AppService,
+    AppService
     // {
     //   provide: APP_GUARD,
     //   useClass: AuthenticatedGuard

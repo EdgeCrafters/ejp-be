@@ -40,3 +40,5 @@ lerna-debug.log*
 thunderActivity.json
 thunder-tests/environments
 !thunder-tests/environments/base.json
+
+/resources

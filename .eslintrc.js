@@ -20,8 +20,11 @@ module.exports = {
     '@typescript-eslint/consistent-type-imports': 'warn',
     '@typescript-eslint/no-import-type-side-effects': 'error',
     '@typescript-eslint/no-inferrable-types': 'warn',
-    "prettier/prettier": ["error",{
-      "endOfLine": "auto"},
+    'prettier/prettier': [
+      'error',
+      {
+        endOfLine: 'auto'
+      }
     ]
   }
 }
