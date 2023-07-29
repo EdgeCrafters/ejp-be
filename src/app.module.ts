@@ -19,14 +19,14 @@ import { ReposModule } from './repos/repos.module'
   controllers: [AppController],
   providers: [
     AppService,
-    {
-      provide: APP_GUARD,
-      useClass: AuthenticatedGuard
-    },
-    {
-      provide: APP_GUARD,
-      useClass: RolesGuard
-    }
+    // {
+    //   provide: APP_GUARD,
+    //   useClass: AuthenticatedGuard
+    // },
+    // {
+    //   provide: APP_GUARD,
+    //   useClass: RolesGuard
+    // }
   ]
 })
 export class AppModule {}

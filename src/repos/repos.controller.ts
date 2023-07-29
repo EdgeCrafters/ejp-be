@@ -47,3 +47,5 @@ export class ReposController {
     return await this.reposService.getRepos()
   }
 }
+
+//학생이 레포 url 요청하면 
