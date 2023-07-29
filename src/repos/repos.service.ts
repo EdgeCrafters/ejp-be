@@ -53,6 +53,7 @@ export class ReposService {
       }
     })
     if (!requestedUrl) return new BadRequestException('존재하지않는 url입니다')
+    
     const studentId = await this.prismaService.user.findUnique({
       where: {
         nickname: id
