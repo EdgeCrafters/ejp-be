@@ -70,6 +70,7 @@ model Problem {
 
 model TestCase {
   id        Int     @id @default(autoincrement())
+  url       String  @db.VarChar(255)
   Repo      Repo    @relation(fields: [repoId], references: [id], onDelete: Cascade)
   repoId    Int
   Problem   Problem @relation(fields: [problemId], references: [id], onDelete: Cascade)
@@ -78,6 +79,7 @@ model TestCase {
 
 model HiddenCase {
   id        Int     @id @default(autoincrement())
+  url       String  @db.VarChar(255)
   bias      String
   Repo      Repo    @relation(fields: [repoId], references: [id])
   repoId    Int

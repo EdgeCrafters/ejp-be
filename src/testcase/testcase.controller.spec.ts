@@ -3,6 +3,7 @@ import { TestcaseController } from './testcase.controller'
 import { expect } from 'chai'
 import { TestcaseService } from './testcase.service'
 import { PrismaService } from 'src/prisma/prisma.service'
+import { ProblemService } from 'src/problem/problem.service'
 
 describe('TestcaseController', () => {
   let controller: TestcaseController
@@ -10,7 +11,11 @@ describe('TestcaseController', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [TestcaseController],
-      providers: [TestcaseService, { provide: PrismaService, useValue: {} }]
+      providers: [
+        TestcaseService,
+        ProblemService,
+        { provide: PrismaService, useValue: {} }
+      ]
     }).compile()
 
     controller = module.get<TestcaseController>(TestcaseController)
