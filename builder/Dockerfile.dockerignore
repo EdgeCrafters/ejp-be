@@ -1,0 +1,16 @@
+*
+
+!src
+!prisma
+!package.json
+!pnpm-lock.yaml
+!builder/entrypoint.sh
+!nest-cli.json
+!tsconfig.build.json
+!tsconfig.json
+!.swcrc
+!.npmrc
+
+dist
+.env
+.env.*

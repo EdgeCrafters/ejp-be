@@ -32,8 +32,10 @@ model Repo {
   name String @db.VarChar(255)
   url  String @db.VarChar(255)
 
-  Problem  Problem[]
-  UserRepo UserRepo[]
+  Problem    Problem[]
+  UserRepo   UserRepo[]
+  TestCase   TestCase[]
+  HiddenCase HiddenCase[]
 }
 
 model UserRepo {
@@ -68,16 +70,17 @@ model Problem {
 
 model TestCase {
   id        Int     @id @default(autoincrement())
-  input     String  @db.Text
-  output    String  @db.Text
+  Repo      Repo    @relation(fields: [repoId], references: [id], onDelete: Cascade)
+  repoId    Int
   Problem   Problem @relation(fields: [problemId], references: [id], onDelete: Cascade)
   problemId Int
 }
 
 model HiddenCase {
   id        Int     @id @default(autoincrement())
-  input     String  @db.Text
-  output    String  @db.Text
+  bias      String
+  Repo      Repo    @relation(fields: [repoId], references: [id])
+  repoId    Int
   Problem   Problem @relation(fields: [problemId], references: [id], onDelete: Cascade)
   problemId Int
 }
