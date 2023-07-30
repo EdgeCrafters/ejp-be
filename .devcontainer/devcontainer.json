@@ -13,7 +13,6 @@
         "hbenl.test-adapter-converter",
         "hbenl.vscode-mocha-test-adapter",
         "hbenl.vscode-test-explorer",
-        "ms-azuretools.vscode-docker",
         "prisma.prisma",
         "rangav.vscode-thunder-client"
       ]
