@@ -7,9 +7,17 @@ import { ConfigModule } from '@nestjs/config'
 import { APP_GUARD } from '@nestjs/core'
 import { AuthenticatedGuard } from './auth/guard/authenticated.guard'
 import { RolesGuard } from './common/guard/roles.guard'
+import { ProblemModule } from './problem/problem.module'
+import { TestcaseModule } from './testcase/testcase.module'
 
 @Module({
-  imports: [ConfigModule.forRoot({ isGlobal: true }), AuthModule, PrismaModule],
+  imports: [
+    ConfigModule.forRoot({ isGlobal: true }),
+    AuthModule,
+    PrismaModule,
+    ProblemModule,
+    TestcaseModule
+  ],
   controllers: [AppController],
   providers: [
     AppService,
