@@ -14,12 +14,13 @@ export class AuthService {
   async validateUser(
     username: string,
     password: string
-  ): Promise<{ username: string }> {
+  ): Promise<{ userId: number }> {
     const user = await this.prisma.user.findUnique({
       where: {
         username
       },
       select: {
+        id: true,
         password: true
       }
     })
@@ -35,7 +36,7 @@ export class AuthService {
     }
 
     return {
-      username
+      userId: user.id
     }
   }
 
@@ -56,11 +57,11 @@ export class AuthService {
     return user.role === Role.Tutor
   }
 
-  async deSerializeUser(username: string): Promise<{ username: string }> {
+  async deSerializeUser(userId: number): Promise<{ userId: number }> {
     const user = await this.prisma.user.findUnique({
-      where: { username },
+      where: { id: userId },
       select: {
-        username: true
+        id: true
       }
     })
 
@@ -68,7 +69,9 @@ export class AuthService {
       throw new NotFoundException('존재하지 않는 유저입니다.')
     }
 
-    return user
+    return {
+      userId: user.id
+    }
   }
 
   async verifyPassword(password: string, passwordInput: string) {
