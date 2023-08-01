@@ -12,7 +12,7 @@ const path = require('path')
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const fs = require('fs')
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-const {exec} = require('child_process')
+const { exec } = require('child_process')
 
 @Injectable()
 export class ReposService {
@@ -27,7 +27,7 @@ export class ReposService {
   } //payload 확정되면 수정
 
   async createNewRepo(id: string) {
-    // const repoPath = path.resolve(`./resources/${id}`)
+    const repoPath = path.resolve(`./resources/${id}`)
     // const mkdir = (dir) => {
     //   if (!fs.existsSync(dir)) {
     //     fs.mkdirSync(dir)
@@ -39,17 +39,14 @@ export class ReposService {
     // if (!mkdir(repoPath)) return new NotAcceptableException()
 
     // await nodegit.Repository.init(repoPath, 0)
-    // const newRepo = await this.prismaService.repo.create({
-    //   data: {
-    //     name: id,
-    //     url: repoPath
-    //   }
-    // })
-    // return repoPath
-    await exec(`ls`, (err, stdout, stderr)=> {
-      console.log(stdout)
+    const newRepo = await this.prismaService.repo.create({
+      data: {
+        name: id,
+        url: repoPath
+      }
     })
-    await exec(`./scripts/create-new-repo.sh ${id}`, (err, stdout, stderr)=> {
+    // return repoPath
+    exec(`./scripts/create-new-repo.sh ${id}`, (err, stdout, stderr) => {
       console.log(err)
     })
   }
@@ -62,22 +59,23 @@ export class ReposService {
       }
     })
     if (!requestedUrl) return new BadRequestException('존재하지않는 url입니다')
-    
-    const studentId = await this.prismaService.user.findUnique({
-      where: {
-        nickname: id
-      },
-      select: {
-        id: true
-      }
+    // const studentId = await this.prismaService.user.findUnique({
+    //   where: {
+    //     nickname: id
+    //   },
+    //   select: {
+    //     id: true
+    //   }
+    // })
+    // const createNewUserRepo = await this.prismaService.userRepo.create({
+    //   data: {
+    //     userId: studentId.id,
+    //     repoId: requestedUrl.id
+    //   }
+    // })
+    exec(`./scripts/add-user ${id} ${body.sha}`, (err, stdout, stderr) => {
+      console.log(err)
     })
-    const createNewUserRepo = await this.prismaService.userRepo.create({
-      data: {
-        userId: studentId.id,
-        repoId: requestedUrl.id
-      }
-    })
-
     return requestedUrl.url
   }
 
