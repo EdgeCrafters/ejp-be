@@ -8,7 +8,6 @@ export class LocalSerializer extends PassportSerializer {
   constructor(private readonly authService: AuthService) {
     super()
   }
-
   serializeUser(user: AuthenticatedUser, done: CallableFunction) {
     done(null, user.userId)
   }

@@ -1,6 +1,6 @@
 export class AuthenticatedUser {
-  #userId: number
 
+  #userId: number
   constructor(userId: number) {
     this.#userId = userId
   }

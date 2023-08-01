@@ -86,3 +86,4 @@ model HiddenCase {
   Problem   Problem @relation(fields: [problemId], references: [id], onDelete: Cascade)
   problemId Int
 }
+

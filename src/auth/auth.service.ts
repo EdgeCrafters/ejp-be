@@ -20,6 +20,7 @@ export class AuthService {
         username
       },
       select: {
+
         id: true,
         password: true
       }
@@ -56,6 +57,7 @@ export class AuthService {
 
     return user.role === Role.Tutor
   }
+
 
   async deSerializeUser(userId: number): Promise<{ userId: number }> {
     const user = await this.prisma.user.findUnique({
