@@ -4,9 +4,6 @@ import {
   NotAcceptableException
 } from '@nestjs/common'
 import { PrismaService } from '../prisma/prisma.service'
-import * as nodegit from 'nodegit'
-import { Request } from 'express'
-import { stderr, stdout } from 'process'
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const path = require('path')
 // eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -76,7 +73,7 @@ export class ReposService {
     exec(`./scripts/add-user ${id} ${body.sha}`, (err, stdout, stderr) => {
       console.log(err)
     })
-    return requestedUrl.url
+    return 'test'
   }
 
   async getRepos() {

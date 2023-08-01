@@ -36,7 +36,7 @@ export class ReposController {
 
   //학생이 레포 url 요청 + id
   @Roles(Role.Student)
-  @Get(':id') //repo이름 
+  @Get(':id') //repo이름
   async getRepoUrl(@Param('id') id: string, @Body() body) {
     return await this.reposService.getRepoUrl(id, body)
   }
