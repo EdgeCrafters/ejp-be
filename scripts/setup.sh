@@ -42,28 +42,33 @@ service ssh restart
 yes '' | ssh-keygen -N ''
 
 
-usernames=("git-repo" "gitolite")
+usernames=("git" "testuser")
 for username in "${usernames[@]}"
 do
 sudo useradd -m -s /bin/bash "$username"
 
-echo "$username:qwerty" | sudo chpasswd
+echo "$username:0000" | sudo chpasswd
 
 sudo chown -R "$username:$username" "/home/$username"
 
 sudo chmod 700 "/home/$username"
 done
 
-ssh-copy-id -i ~/.ssh/id_rsa.pub gitolite@localhost 
-ssh-copy-id -i ~/.ssh/id_rsa.pub git-repo@localhost
+cp /root/.ssh/id_rsa.pub /tmp/root.pub
+ssh git@localhost -t 'git clone https://github.com/sitaramc/gitolite && cd $HOME && mkdir -p bin && gitolite/install -to $HOME/bin && cd $HOME && $HOME/bin/gitolite setup -pk /tmp/root.pub && exit; bash'
+
+git clone git@localhost:gitolite-admin
+
+# ssh-copy-id -i ~/.ssh/id_rsa.pub gitolite@localhost 
+# ssh-copy-id -i ~/.ssh/id_rsa.pub git-repo@localhost
   
 
-ssh -t git-repo@localhost 'git clone https://github.com/sitaramc/gitolite.git && ./gitolite/install && exit; bash' 
+# ssh -t git-repo@localhost 'git clone https://github.com/sitaramc/gitolite.git && ./gitolite/install && exit; bash' 
 
 
-ssh -t gitolite@localhost  ' (yes "" | ssh-keygen -N "") && scp ~/.ssh/id_rsa.pub git-repo@localhost:/home/git-repo/.ssh/gitolite.pub && exit; bash'
+# ssh -t gitolite@localhost  ' (yes "" | ssh-keygen -N "") && scp ~/.ssh/id_rsa.pub git-repo@localhost:/home/git-repo/.ssh/gitolite.pub && exit; bash'
 
-ssh -t git-repo@localhost './gitolite/src/gitolite setup -pk ./.ssh/gitolite.pub && exit; bash'
+# ssh -t git-repo@localhost './gitolite/src/gitolite setup -pk ./.ssh/gitolite.pub && exit; bash'
 
-ssh -t gitolite@localhost 'git clone git-repo@localhost:gitolite-admin.git && exit; bash'
+# ssh -t gitolite@localhost 'git clone git-repo@localhost:gitolite-admin.git && exit; bash'
 
