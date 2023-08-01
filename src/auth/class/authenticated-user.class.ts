@@ -1,11 +1,11 @@
 export class AuthenticatedUser {
-  #username: string
 
-  constructor(username: string) {
-    this.#username = username
+  #userId: number
+  constructor(userId: number) {
+    this.#userId = userId
   }
 
-  get username() {
-    return this.#username
+  get userId() {
+    return this.#userId
   }
 }

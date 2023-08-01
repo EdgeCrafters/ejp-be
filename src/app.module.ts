@@ -8,25 +8,30 @@ import { APP_GUARD } from '@nestjs/core'
 import { AuthenticatedGuard } from './auth/guard/authenticated.guard'
 import { RolesGuard } from './common/guard/roles.guard'
 import { ReposModule } from './repos/repos.module'
+import { ProblemModule } from './problem/problem.module'
+import { TestcaseModule } from './testcase/testcase.module'
+
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
-    PrismaModule,
     ReposModule,
-    AuthModule
+    AuthModule,
+    PrismaModule,
+    ProblemModule,
+    TestcaseModule
   ],
   controllers: [AppController],
   providers: [
-    AppService
-    // {
-    //   provide: APP_GUARD,
-    //   useClass: AuthenticatedGuard
-    // },
-    // {
-    //   provide: APP_GUARD,
-    //   useClass: RolesGuard
-    // }
+    AppService,
+    {
+      provide: APP_GUARD,
+      useClass: AuthenticatedGuard
+    },
+    {
+      provide: APP_GUARD,
+      useClass: RolesGuard
+    }
   ]
 })
 export class AppModule {}

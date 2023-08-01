@@ -15,6 +15,8 @@ cd $BASEDIR
 
 # Generate env file
 echo "DATABASE_URL=\"postgresql://postgres:1234@skku-ejs-dev-db:5432/skku?schema=public\"" >> .env
+echo "PORT=4000" >> .env
+echo "SESSION_SECRET=ASD3FCV3XDSI5MVQWR643LKW23EQFLM" >> .env
 
 # Install pnpm and Node.js packages
 npm install -g pnpm@latest
