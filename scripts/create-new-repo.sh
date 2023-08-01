@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 repo_name=$1
 
@@ -15,7 +15,13 @@ repo_name=$1
 # git init --bare repo.git/
 # exit
 
-ssh -t gitolite@localhost 'cd ./gitolite-admin/conf/ && (echo -e "repo $repo_name\n RW+ = gitolite\n  R = @all" >> ./gitolite.conf) && git add ./gitolite.conf && git commit -m "create new repo" && git push && exit; bash'
+# ssh -t gitolite@localhost 'cd ./gitolite-admin/conf/ && (echo -e "repo $repo_name\n RW+ = gitolite\n  R = @all" >> ./gitolite.conf) && git add ./gitolite.conf && git commit -m "create new repo" && git push && exit; bash'
+cd ./gitolite-admin/conf/
+echo -e "repo $repo_name\n  RW+  =  root \n  R  =    @all" >> ./gitolite.conf
+git add ./gitolite.conf
+git commit -m "adding repo '$repo_name'"
+git push
+cd ../../..
 
 
 

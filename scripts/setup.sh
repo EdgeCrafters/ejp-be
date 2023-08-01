@@ -59,6 +59,7 @@ ssh git@localhost -t 'git clone https://github.com/sitaramc/gitolite && cd $HOME
 
 git clone git@localhost:gitolite-admin
 
+chmod +x ./scripts/create-new-repo.sh
 # ssh-copy-id -i ~/.ssh/id_rsa.pub gitolite@localhost 
 # ssh-copy-id -i ~/.ssh/id_rsa.pub git-repo@localhost
   

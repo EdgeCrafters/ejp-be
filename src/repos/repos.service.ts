@@ -23,8 +23,8 @@ export class ReposService {
     return scores
   } //payload 확정되면 수정
 
-  async createNewRepo(id: string) {
-    const repoPath = path.resolve(`./resources/${id}`)
+  async createNewRepo(repoName: string) {
+    // const repoPath = path.resolve(`./resources/${id}`)
     // const mkdir = (dir) => {
     //   if (!fs.existsSync(dir)) {
     //     fs.mkdirSync(dir)
@@ -36,16 +36,22 @@ export class ReposService {
     // if (!mkdir(repoPath)) return new NotAcceptableException()
 
     // await nodegit.Repository.init(repoPath, 0)
+    try{
     const newRepo = await this.prismaService.repo.create({
       data: {
-        name: id,
-        url: repoPath
+        name: repoName,
+        url: repoName,
       }
     })
+  }
+  catch(e){
+    return new BadRequestException('이미 존재하는 repo입니다')
+  }
     // return repoPath
-    exec(`./scripts/create-new-repo.sh ${id}`, (err, stdout, stderr) => {
+    exec(`./scripts/create-new-repo.sh ${repoName}`, (err, stdout, stderr) => {
       console.log(err)
     })
+    return repoName
   }
 
   //학생이 url 요청했을때, userrepo에 학생 등록

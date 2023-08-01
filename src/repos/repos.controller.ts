@@ -28,9 +28,9 @@ export class ReposController {
     return new CommonResponseDto(new GetScoreListDto(contents))
   }
 
-  @Post(':id')
-  async createRepo(@Param('id') id: string) {
-    const newRepoUrl = await this.reposService.createNewRepo(id)
+  @Post(':repoName')
+  async createRepo(@Param('repoName') repoName: string) {
+    const newRepoUrl = await this.reposService.createNewRepo(repoName)
     return newRepoUrl
   }
 
