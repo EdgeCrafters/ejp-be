@@ -54,7 +54,7 @@ export class ReposService {
     return repoName
   }
 
-  //학생이 url 요청했을때, userrepo에 학생 등록
+  //gitolite-admin에 학생 등록 & user table에 학생 추가
   async getRepoUrl(id: string, body) {
     // const requestedUrl = await this.prismaService.repo.findUnique({
     //   where: {
