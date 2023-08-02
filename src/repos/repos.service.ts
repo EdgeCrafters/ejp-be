@@ -1,13 +1,5 @@
-import {
-  BadRequestException,
-  Injectable,
-  NotAcceptableException
-} from '@nestjs/common'
+import { BadRequestException, Injectable } from '@nestjs/common'
 import { PrismaService } from '../prisma/prisma.service'
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const path = require('path')
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const fs = require('fs')
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const { exec } = require('child_process')
 
@@ -15,74 +7,58 @@ const { exec } = require('child_process')
 export class ReposService {
   constructor(private readonly prismaService: PrismaService) {}
 
-  async getScoreList(id: number) {
-    const scores = await this.prismaService.score.findMany({
-      where: { userId: id }
-    })
-    console.log({ scores })
-    return scores
-  } //payload 확정되면 수정
-
   async createNewRepo(repoName: string) {
-    // const repoPath = path.resolve(`./resources/${id}`)
-    // const mkdir = (dir) => {
-    //   if (!fs.existsSync(dir)) {
-    //     fs.mkdirSync(dir)
-    //     return true
-    //   } else {
-    //     return false
-    //   }
-    // }
-    // if (!mkdir(repoPath)) return new NotAcceptableException()
-
-    // await nodegit.Repository.init(repoPath, 0)
-    try{
-    const newRepo = await this.prismaService.repo.create({
-      data: {
-        name: repoName,
-        url: repoName,
+    const repoExist = await this.prismaService.repo.findFirst({
+      where: {
+        name: repoName
       }
     })
-  }
-  catch(e){
-    return new BadRequestException('이미 존재하는 repo입니다')
-  }
-    // return repoPath
-    exec(`./scripts/create-new-repo.sh ${repoName}`, (err, stdout, stderr) => {
-      console.log(err)
+    if (repoExist) {
+      console.log(repoExist)
+      return new BadRequestException('이미 존재하는 repo입니다')
+    }
+    await this.prismaService.$transaction(async (tx) => {
+      const newRepo = await tx.repo.create({
+        data: {
+          name: repoName
+        }
+      })
+      exec(`./scripts/create-new-repo.sh ${repoName}`)
     })
     return repoName
   }
 
-  //gitolite-admin에 학생 등록 & user table에 학생 추가
-  async getRepoUrl(id: string, body) {
-    // const requestedUrl = await this.prismaService.repo.findUnique({
-    //   where: {
-    //     url: body.url
-    //   }
-    // })
-    // if (!requestedUrl) return new BadRequestException('존재하지않는 url입니다')
-    // const studentId = await this.prismaService.user.findUnique({
-    //   where: {
-    //     nickname: id
-    //   },
-    //   select: {
-    //     id: true
-    //   }
-    // })
-    // const createNewUserRepo = await this.prismaService.userRepo.create({
-    //   data: {
-    //     userId: studentId.id,
-    //     repoId: requestedUrl.id
-    //   }
-    // })
-    exec(`./scripts/add-user ${id} ${body.sha}`, (err, stdout, stderr) => {
-      console.log(err)
-    })
-    return 'test'
+  //gitolite-admin에 학생 등록
+  async addUserToRepo(id: number, body) {
+    const { repoId, ssh } = body
+    try {
+      await this.prismaService.$transaction(async (tx) => {
+        const user = await tx.user.findFirst({
+          where: {
+            id: id
+          }
+        })
+        const repo = await tx.repo.findFirst({
+          where: {
+            id: parseInt(repoId)
+          }
+        })
+        const createNewUserRepo = await tx.userRepo.create({
+          data: {
+            userId: id,
+            repoId: repo.id
+          }
+        })
+        exec(`./scripts/add-user.sh ${user.username} ${ssh}`)
+      })
+    } catch (e) {
+      console.log({ e })
+      return 'failed'
+    }
+    return 'success'
   }
 
-  async getRepos() {
+  async getAllRepos() {
     const repos = await this.prismaService.repo.findMany({
       select: {
         name: true
