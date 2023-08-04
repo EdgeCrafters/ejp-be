@@ -17,7 +17,8 @@ repo_name=$1
 
 # ssh -t gitolite@localhost 'cd ./gitolite-admin/conf/ && (echo -e "repo $repo_name\n RW+ = gitolite\n  R = @all" >> ./gitolite.conf) && git add ./gitolite.conf && git commit -m "create new repo" && git push && exit; bash'
 cd ./gitolite-admin/conf/
-echo -e "\nrepo $repo_name\n  RW+  =  root \n  R  =    @all" >> ./gitolite.conf
+echo -e "\nrepo $repo_name\n  RW+  =  root \n  R  =    @$repo_name-group" >> ./gitolite.conf
+echo -e "@$repo_name-group = " >> ./groups/$repo_name.conf
 git add ./gitolite.conf
 git commit -m "adding repo '$repo_name'"
 git push

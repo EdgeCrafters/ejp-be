@@ -49,7 +49,7 @@ export class ReposService {
             repoId: repo.id
           }
         })
-        exec(`./scripts/add-user.sh ${user.username} ${ssh}`)
+        exec(`./scripts/add-user.sh ${user.username} ${repo.name} ${ssh}`)
       })
     } catch (e) {
       console.log({ e })
