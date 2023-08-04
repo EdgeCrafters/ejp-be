@@ -65,7 +65,7 @@ git clone git@localhost:gitolite-admin
 
 cd gitolite-admin
 mkdir ./conf/groups
-echo '"include groups/*.conf"' >> ./conf/gitolite.conf
+echo 'include "groups/*.conf"' >> ./conf/gitolite.conf
 git config --global user.email "you@example.com"
 git config --global user.name "Your Name"
 git add . && git commit -m "group conffile added" && git push
