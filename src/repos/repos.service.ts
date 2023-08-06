@@ -83,6 +83,7 @@ export class ReposService {
     })
 
     if (role == Role.Tutor) {
+      console.log("true")
       exec(`./scripts/add-tutor.sh ${username}`)
     }
     exec(`./scripts/create-user.sh ${username} ${ssh}`)
