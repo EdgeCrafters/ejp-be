@@ -2,6 +2,7 @@ import { BadRequestException, Injectable } from '@nestjs/common'
 import { PrismaService } from '../prisma/prisma.service'
 import * as argon2 from 'argon2'
 import { Role } from '@prisma/client'
+import { stderr } from 'process'
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const { exec } = require('child_process')
 
@@ -83,8 +84,10 @@ export class ReposService {
     })
 
     if (role == Role.Tutor) {
-      console.log("true")
-      exec(`./scripts/add-tutor.sh ${username}`)
+      console.log('true')
+      exec(`./scripts/add-tutor.sh ${username}`, (error, stdout, stderr) => {
+        console.log(error)
+      })
     }
     exec(`./scripts/create-user.sh ${username} ${ssh}`)
     return
