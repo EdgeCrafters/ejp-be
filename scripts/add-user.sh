@@ -8,7 +8,7 @@ repo_name=$2
 
 # cd ./gitolite-admin/keydir/
 # echo "$secret_key1 $secret_key2 $secret_key3" >> $user_name.pub 
-cd ../conf/groups
+cd ./gitolite-admin/conf/groups
 echo -n "$user_name " >> $repo_name.conf
 git add .
 git commit -m "$user_name user added"
