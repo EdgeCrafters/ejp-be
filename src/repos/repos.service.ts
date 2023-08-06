@@ -71,18 +71,19 @@ export class ReposService {
   }
 
   async createUserTemp(body) {
-    const { role, username, nickname, password, sshKey } = body
+    const { role, username, nickname, password, ssh } = body
     await this.prismaService.user.create({
       data: {
         role: role,
         username: username,
         nickname: nickname,
-        password: await argon2.hash(password)
+        password: await argon2.hash(password),
+        sshKey: ssh
       }
     })
 
     if (role === Role.Tutor) {
-      exec(`./scripts/add-tutor.sh ${username} ${sshKey}`)
+      exec(`./scripts/add-tutor.sh ${username} ${ssh}`)
     }
 
     return
