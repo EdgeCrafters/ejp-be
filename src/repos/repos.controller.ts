@@ -30,4 +30,10 @@ export class ReposController {
   async getAllRepos() {
     return await this.reposService.getAllRepos()
   }
+
+  @Post()
+  async createUserTemp(@Body() body) {
+    await this.reposService.createUserTemp(body)
+    return { msg: 'success' }
+  }
 }

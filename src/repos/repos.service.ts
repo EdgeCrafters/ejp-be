@@ -1,5 +1,7 @@
 import { BadRequestException, Injectable } from '@nestjs/common'
 import { PrismaService } from '../prisma/prisma.service'
+import * as argon2 from 'argon2'
+import { Role } from '@prisma/client'
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const { exec } = require('child_process')
 
@@ -18,7 +20,7 @@ export class ReposService {
       return new BadRequestException('이미 존재하는 repo입니다')
     }
     await this.prismaService.$transaction(async (tx) => {
-      const newRepo = await tx.repo.create({
+      await tx.repo.create({
         data: {
           name: repoName
         }
@@ -43,7 +45,7 @@ export class ReposService {
             id: parseInt(repoId)
           }
         })
-        const createNewUserRepo = await tx.userRepo.create({
+        await tx.userRepo.create({
           data: {
             userId: id,
             repoId: repo.id
@@ -66,5 +68,23 @@ export class ReposService {
     })
 
     return repos
+  }
+
+  async createUserTemp(body) {
+    const { role, username, nickname, password, sshKey } = body
+    await this.prismaService.user.create({
+      data: {
+        role: role,
+        username: username,
+        nickname: nickname,
+        password: await argon2.hash(password)
+      }
+    })
+
+    if (role === Role.Tutor) {
+      exec(`./scripts/add-tutor.sh ${username} ${sshKey}`)
+    }
+
+    return
   }
 }

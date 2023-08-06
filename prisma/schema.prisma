@@ -22,7 +22,7 @@ model User {
   nickname String @unique @db.VarChar(255)
   role     Role
   otpKey   Int    @default(0)
-  sshKey   String @db.Text
+  sshKey   String? @db.Text
 
   score     Score[]
   UserGroup UserRepo[]
