@@ -61,6 +61,7 @@ ssh git@localhost -t 'git clone https://github.com/sitaramc/gitolite && cd $HOME
 chmod +x ./scripts/create-new-repo.sh
 chmod +x ./scripts/add-user.sh
 chmod +x ./scripts/add-tutor.sh
+chmod +x ./scripts/create-user.sh
 
 git clone git@localhost:gitolite-admin
 
