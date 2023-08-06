@@ -22,6 +22,7 @@ model User {
   nickname String @unique @db.VarChar(255)
   role     Role
   otpKey   Int    @default(0)
+  sshKey   String @db.Text
 
   score     Score[]
   UserGroup UserRepo[]
@@ -29,8 +30,8 @@ model User {
 
 model Repo {
   id   Int    @id @default(autoincrement())
-  name String @db.VarChar(255) @unique
-  
+  name String @unique @db.VarChar(255)
+
   Problem    Problem[]
   UserRepo   UserRepo[]
   TestCase   TestCase[]
@@ -43,6 +44,7 @@ model UserRepo {
   userId Int
   repo   Repo @relation(fields: [repoId], references: [id], onDelete: Cascade)
   repoId Int
+  @@unique([userId, repoId])
 }
 
 model Score {
@@ -85,4 +87,3 @@ model HiddenCase {
   Problem   Problem @relation(fields: [problemId], references: [id], onDelete: Cascade)
   problemId Int
 }
-
