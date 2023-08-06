@@ -2,7 +2,6 @@ import { BadRequestException, Injectable } from '@nestjs/common'
 import { PrismaService } from '../prisma/prisma.service'
 import * as argon2 from 'argon2'
 import { Role } from '@prisma/client'
-import { stderr } from 'process'
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const { exec } = require('child_process')
 
@@ -32,13 +31,13 @@ export class ReposService {
   }
 
   //gitolite-admin에 학생 등록
-  async addUserToRepo(id: number, body) {
-    const { repoId, ssh } = body
+  async addUserToRepo(body) {
+    const { repoId, userId } = body
     try {
       await this.prismaService.$transaction(async (tx) => {
         const user = await tx.user.findFirst({
           where: {
-            id: id
+            id: userId
           }
         })
         const repo = await tx.repo.findFirst({
@@ -48,11 +47,11 @@ export class ReposService {
         })
         await tx.userRepo.create({
           data: {
-            userId: id,
-            repoId: repo.id
+            userId: userId,
+            repoId: repoId
           }
         })
-        exec(`./scripts/add-user.sh ${user.username} ${repo.name} ${ssh}`)
+        exec(`./scripts/add-user.sh ${user.username} ${repo.name}`)
       })
     } catch (e) {
       console.log({ e })
@@ -84,12 +83,16 @@ export class ReposService {
     })
 
     if (role == Role.Tutor) {
-      console.log('true')
       exec(`./scripts/add-tutor.sh ${username}`, (error, stdout, stderr) => {
         console.log(error, stdout, stderr)
       })
     }
-    exec(`./scripts/create-user.sh ${username} ${ssh}`)
+    exec(
+      `./scripts/create-user.sh ${username} ${ssh}`,
+      (error, stdout, stderr) => {
+        console.log(error, stdout, stderr)
+      }
+    )
     return
   }
 }

@@ -1,12 +1,4 @@
-import {
-  Body,
-  Controller,
-  Get,
-  Param,
-  ParseIntPipe,
-  Post,
-  Put
-} from '@nestjs/common'
+import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common'
 import { ReposService } from './repos.service'
 import { Roles } from 'src/common/decorator/roles.decorator'
 import { Role } from '@prisma/client'
@@ -22,11 +14,12 @@ export class ReposController {
   }
 
   @Roles(Role.Tutor)
-  @Put(':id') //id: userId
-  async addUserToRepo(@Param('id', ParseIntPipe) id: number, @Body() body) {
-    return await this.reposService.addUserToRepo(id, body)
+  @Put()
+  async addUserToRepo(@Body() body) {
+    return await this.reposService.addUserToRepo(body)
   }
 
+  @Roles(Role.Tutor)
   @Get()
   async getAllRepos() {
     return await this.reposService.getAllRepos()
