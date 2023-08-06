@@ -10,6 +10,7 @@ import {
 import { ReposService } from './repos.service'
 import { Roles } from 'src/common/decorator/roles.decorator'
 import { Role } from '@prisma/client'
+import { Public } from 'src/common/decorator/public.decorator'
 @Controller('repos')
 export class ReposController {
   constructor(private readonly reposService: ReposService) {}
@@ -31,6 +32,7 @@ export class ReposController {
     return await this.reposService.getAllRepos()
   }
 
+  @Public()
   @Post()
   async createUserTemp(@Body() body) {
     await this.reposService.createUserTemp(body)
