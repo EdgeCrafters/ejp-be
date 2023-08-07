@@ -1,7 +1,17 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 user_name=$1
-secret_key=$2
+repo_name=$2
+# secret_key1=$3
+# secret_key2=$4
+# secret_key3=$5
 
-ssh -t gitolite@localhost 'cd ./gitolite-admin/keydir/ && cat $secret_key >> $user_name.pub&& exit; bash'
+# cd ./gitolite-admin/keydir/
+# echo "$secret_key1 $secret_key2 $secret_key3" >> $user_name.pub 
+cd ./gitolite-admin/conf/groups
+echo -n "$user_name " >> $repo_name.conf
+git add .
+git commit -m "$user_name user added"
+git push
+cd ../../..
 

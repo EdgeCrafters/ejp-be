@@ -57,7 +57,23 @@ done
 cp /root/.ssh/id_rsa.pub /tmp/root.pub
 ssh git@localhost -t 'git clone https://github.com/sitaramc/gitolite && cd $HOME && mkdir -p bin && gitolite/install -to $HOME/bin && cd $HOME && $HOME/bin/gitolite setup -pk /tmp/root.pub && exit; bash'
 
+
+chmod +x ./scripts/create-new-repo.sh
+chmod +x ./scripts/add-user.sh
+chmod +x ./scripts/add-tutor.sh
+chmod +x ./scripts/create-user.sh
+
 git clone git@localhost:gitolite-admin
+
+cd gitolite-admin
+mkdir ./conf/groups
+echo 'include "groups/*.conf"' >> ./conf/gitolite.conf
+echo -n '@tutors = ' >> ./conf/groups/tutors.conf
+git config --global user.email "you@example.com"
+git config --global user.name "Your Name"
+git add . && git commit -m "group conffile added" && git push
+cd ..
+
 
 # ssh-copy-id -i ~/.ssh/id_rsa.pub gitolite@localhost 
 # ssh-copy-id -i ~/.ssh/id_rsa.pub git-repo@localhost
