@@ -7,7 +7,7 @@ on:
     types: [opened, edited, synchronize, reopened]
 
 jobs:
-  build:
+  ejs-be-build:
     runs-on: ${{ matrix.os }}
 
     strategy:
@@ -40,7 +40,7 @@ jobs:
           path: ./*/dist
           key: ${{ matrix.os }}-node-v${{ matrix.node }}-${{ github.sha }}
 
-  lint:
+  ejs-be-lint:
     runs-on: ${{ matrix.os }}
 
     strategy:
@@ -67,7 +67,7 @@ jobs:
       - name: Check style
         run: pnpm format:check
 
-  test:
+  ejs-be-test:
     runs-on: ${{ matrix.os }}
 
     strategy:
