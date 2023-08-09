@@ -88,3 +88,8 @@ cd ..
 
 # ssh -t gitolite@localhost 'git clone git-repo@localhost:gitolite-admin.git && exit; bash'
 
+
+
+# setup scripts for ejs-t & ejs-s
+cd $BASEDIR
+sudo apt-get install git clang cmake g++ pkg-config libkrb5-dev libssl-dev python3
