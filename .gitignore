@@ -42,3 +42,7 @@ thunder-tests/environments
 !thunder-tests/environments/base.json
 
 /resources
+
+# ejs-t
+C/ejs-t/build/*
+C/ejs-t/cmake-build-Release/*
