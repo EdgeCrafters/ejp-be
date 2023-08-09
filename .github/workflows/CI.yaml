@@ -152,3 +152,37 @@ jobs:
       - name: test
         working-directory: ${{github.workspace}}/C/ejs-t/build
         run: ctest --parallel 2
+
+  cmake-ejs-s:
+    # The CMake configure and build commands are platform agnostic and should work equally well on Windows or Mac.
+    # You can convert this to a matrix build if you need cross-platform coverage.
+    # See: https://docs.github.com/en/free-pro-team@latest/actions/learn-github-actions/managing-complex-workflows#using-a-build-matrix
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Build Environment
+        # Build your program with the given configuration
+        run: cmake -E make_directory build
+        working-directory: ${{github.workspace}}/C/ejs-s
+
+      - name: Install ninja-build tool
+        uses: seanmiddleditch/gha-setup-ninja@v3
+
+      - name: Install Clang
+        uses: egor-tensin/setup-clang@v1.4
+
+      - name: Build
+        working-directory: ${{github.workspace}}/C/ejs-s/build
+        # Execute tests defined by the CMake configuration.
+        # See https://cmake.org/cmake/help/latest/manual/ctest.1.html for more detail
+        run: cmake -DCMAKE_C_COMPILER=clang -GNinja .. && cmake --build . --config release --parallel 2 --clean-first
+
+      - name: test
+        working-directory: ${{github.workspace}}/C/ejs-s/build
+        run: ctest --parallel 2
