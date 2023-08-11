@@ -37,6 +37,25 @@
                 "form": []
             },
             "tests": []
+        },
+        {
+            "_id": "34619434-f6ce-4fc0-971a-b8a68d5eb1bb",
+            "colId": "41938bc8-063a-4344-844a-1c108ec9224f",
+            "containerId": "",
+            "name": "createUser",
+            "url": "localhost:4000/repos",
+            "method": "POST",
+            "sortNum": 40000,
+            "created": "2023-08-10T05:10:29.119Z",
+            "modified": "2023-08-11T04:55:04.069Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"role\":\"Tutor\",\n  \"username\":\"jcy\",\n  \"nickname\":\"any11\",\n  \"password\":\"1234\",\n  \"ssh\":\"ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDNj3aAntTOoLo7ZTbCZi7i8KAzG0OGftKSsCgdcqfTuvhEmCXoVdgBmvIzCAH66SH1BPBGmLrktMcuUnZ+Q1z3P2naA3KLibFUyPbVOgproAeeC1mmzI1g7efoZRkhYQMl/Fjx4UhkDBTeQEXYtoWxd8KcHPUliNdJYtTU7movw60PhGAJgpOX3fxbJRLnp+ejIwbgygdRp+Y/KjkQDBMxTcbNIEOCFBNne/byBLSL00HUb/gPn/pDX2acTAkELrzcgOwNROKqmZve3jAzWwQRg5nMu6nKzS/Iu6eOjGs7w73WNUsMhbm8xJ+CFBNWGs6XPoqbysuiBbz8NOMbEhbPIPrAlyHnyWMtGUOKx9fuWA03CjQLo59/rqy0KCVkWJo2/21HtZppt549jR2K3Fp6tMLE51gb82k/eyLYMDs+vaqndPJiKAcD3/ZhHzPVlGlPwOvq2KFKTpXzgj8iH8Mzn/olhCXKei3toOdCla02vYXzKpelDPxYECHAyoU/Zz8= jcy@Jcy\"\n}",
+                "form": []
+            },
+            "tests": []
         }
     ]
 }
