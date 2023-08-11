@@ -5,6 +5,9 @@ services:
     profiles: ['devcontainer']
     container_name: skku-ejs-dev
     image: mcr.microsoft.com/vscode/devcontainers/typescript-node:18-bullseye
+    ports:
+      - 4000:4000
+      - 22:22
     volumes:
       - .:/workspace:cached
     stdin_open: true
