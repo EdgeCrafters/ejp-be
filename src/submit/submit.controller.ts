@@ -30,5 +30,7 @@ export class SubmitController {
     @Req() request
   ) {
     await this.submitService.updateResult(hiddenCaseId, hashedOutput, request)
+
+    return { message: 'succeed' }
   }
 }
