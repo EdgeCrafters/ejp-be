@@ -1,14 +1,18 @@
-import { Controller, Post, Req, UseGuards } from '@nestjs/common'
+import { Body, Controller, Post, Req, UseGuards } from '@nestjs/common'
 import { AuthService } from './auth.service'
 import { LocalAuthGuard } from './guard/local-auth.guard'
 import { Public } from 'src/common/decorator/public.decorator'
 import { Roles } from 'src/common/decorator/roles.decorator'
 import { Role } from '@prisma/client'
+import { ReposService } from 'src/repos/repos.service'
 
 @Public()
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    private readonly authService: AuthService,
+    private readonly repoService: ReposService
+  ) {}
 
   @Post('login')
   @UseGuards(LocalAuthGuard)
@@ -21,5 +25,12 @@ export class AuthController {
   logout(@Req() req) {
     req.session.destroy()
     return { msg: 'logout succeed' }
+  }
+
+  @Public()
+  @Post('createuser')
+  async createUser(@Body() body) {
+    await this.repoService.createUser(body)
+    return { msg: 'success' }
   }
 }

@@ -10,7 +10,8 @@ export class ReposController {
   @Roles(Role.Tutor)
   @Post(':repoName')
   async createRepo(@Param('repoName') repoName: string) {
-    return await this.reposService.createNewRepo(repoName)
+    const newRepo = await this.reposService.createNewRepo(repoName)
+    return { repoId: newRepo.id }
   }
 
   @Roles(Role.Tutor)
@@ -27,8 +28,8 @@ export class ReposController {
 
   @Public()
   @Post()
-  async createUserTemp(@Body() body) {
-    await this.reposService.createUserTemp(body)
+  async createUser(@Body() body) {
+    await this.reposService.createUser(body)
     return { msg: 'success' }
   }
 }
