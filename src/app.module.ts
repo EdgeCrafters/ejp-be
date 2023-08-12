@@ -10,6 +10,7 @@ import { RolesGuard } from './common/guard/roles.guard'
 import { ReposModule } from './repos/repos.module'
 import { ProblemModule } from './problem/problem.module'
 import { TestcaseModule } from './testcase/testcase.module'
+import { SubmitModule } from './submit/submit.module'
 
 @Module({
   imports: [
@@ -18,7 +19,8 @@ import { TestcaseModule } from './testcase/testcase.module'
     AuthModule,
     PrismaModule,
     ProblemModule,
-    TestcaseModule
+    TestcaseModule,
+    SubmitModule
   ],
   controllers: [AppController],
   providers: [

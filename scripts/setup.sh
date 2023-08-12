@@ -36,26 +36,26 @@ do
   sleep 5
 done
 
-sudo apt-get update
-sudo apt-get install -y openssh-server ssh-client
-service ssh restart
-yes '' | ssh-keygen -N ''
+# sudo apt-get update
+# sudo apt-get install -y openssh-server ssh-client
+# service ssh restart
+# yes '' | ssh-keygen -N ''
 
 
-usernames=("git" "testuser")
-for username in "${usernames[@]}"
-do
-sudo useradd -m -s /bin/bash "$username"
+# usernames=("git" "testuser")
+# for username in "${usernames[@]}"
+# do
+# sudo useradd -m -s /bin/bash "$username"
 
-echo "$username:0000" | sudo chpasswd
+# echo "$username:0000" | sudo chpasswd
 
-sudo chown -R "$username:$username" "/home/$username"
+# sudo chown -R "$username:$username" "/home/$username"
 
-sudo chmod 700 "/home/$username"
-done
+# sudo chmod 700 "/home/$username"
+# done
 
-cp /root/.ssh/id_rsa.pub /tmp/root.pub
-ssh git@localhost -t 'git clone https://github.com/sitaramc/gitolite && cd $HOME && mkdir -p bin && gitolite/install -to $HOME/bin && cd $HOME && $HOME/bin/gitolite setup -pk /tmp/root.pub && exit; bash'
+# cp /root/.ssh/id_rsa.pub /tmp/root.pub
+# ssh git@localhost -t 'git clone https://github.com/sitaramc/gitolite && cd $HOME && mkdir -p bin && gitolite/install -to $HOME/bin && cd $HOME && $HOME/bin/gitolite setup -pk /tmp/root.pub && exit; bash'
 
 
 chmod +x ./scripts/create-new-repo.sh
@@ -63,6 +63,7 @@ chmod +x ./scripts/add-user.sh
 chmod +x ./scripts/add-tutor.sh
 chmod +x ./scripts/create-user.sh
 
+rm -rf gitolite-admin
 git clone git@localhost:gitolite-admin
 
 cd gitolite-admin

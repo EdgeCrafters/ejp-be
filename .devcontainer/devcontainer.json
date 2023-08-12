@@ -2,8 +2,9 @@
   "name": "skku-ejs",
   "dockerComposeFile": "../docker-compose.yml",
   "service": "app",
-  "runServices": ["app", "dev-db"],
+  "runServices": ["app", "dev-db", "gitolite"],
   "workspaceFolder": "/workspace",
+  "onCreateCommand": "scripts/pre-setup.sh",
   "postCreateCommand": "scripts/setup.sh",
   "customizations": {
     "vscode": {

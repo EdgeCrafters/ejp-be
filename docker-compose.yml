@@ -20,3 +20,11 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: 1234
       POSTGRES_DB: skku
+  gitolite:
+    container_name: gitolite-server
+    image: elsdoerfer/gitolite
+    ports:
+      - 22:22
+    environment:
+      SSH_KEY: ${SSH_KEY}
+    
