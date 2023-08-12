@@ -46,3 +46,6 @@ thunder-tests/environments
 # ejs-t
 C/ejs-t/build/*
 C/ejs-t/cmake-build-Release/*
+
+# gitolite
+gitolite-admin

@@ -3,20 +3,25 @@ import {
   Injectable,
   InternalServerErrorException
 } from '@nestjs/common'
+import type { HiddenCase } from '@prisma/client'
 import { PrismaService } from 'src/prisma/prisma.service'
 
 @Injectable()
 export class SubmitService {
   constructor(private readonly prismaService: PrismaService) {}
 
-  async getBias(hiddenCaseId: number) {
+  async getBias(hiddenCaseId: number): Promise<string> {
     return (await this.getHiddenCase(hiddenCaseId)).bias
   }
 
-  async updateResult(hiddenCaseId: number, hashedOutput: string, request) {
+  async updateResult(
+    hiddenCaseId: number,
+    hashedOutput: string,
+    id: number
+  ): Promise<void> {
     const user = await this.prismaService.user.findUnique({
       where: {
-        id: request.session.passport.user
+        id
       }
     })
 
@@ -60,7 +65,7 @@ export class SubmitService {
     }
   }
 
-  private async getHiddenCase(hiddenCaseId: number) {
+  private async getHiddenCase(hiddenCaseId: number): Promise<HiddenCase> {
     const hiddenCase = await this.prismaService.hiddenCase.findUnique({
       where: {
         id: hiddenCaseId

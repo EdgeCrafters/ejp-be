@@ -9,27 +9,33 @@ import {
   UseGuards
 } from '@nestjs/common'
 import { SubmitService } from './submit.service'
-import { AuthenticatedGuard } from 'src/auth/guard/authenticated.guard'
+import { AuthenticatedRequest } from 'src/common/interface/authenticated-request.interface'
+import { RepoGuard } from 'src/problem/guards/repo.guard'
 
 @Controller('submit')
 export class SubmitController {
   constructor(private readonly submitService: SubmitService) {}
 
-  @Get(':hiddenCaseId')
+  @Get('repoId/:repoId/hiddenCaseId/:hiddenCaseId')
+  @UseGuards(RepoGuard)
   async getBias(@Param('hiddenCaseId', ParseIntPipe) hiddenCaseId: number) {
     const bias = await this.submitService.getBias(hiddenCaseId)
 
     return { bias: bias }
   }
 
-  @Put(':hiddenCaseId')
-  @UseGuards(AuthenticatedGuard)
+  @Put('repoId/:repoId/hiddenCaseId/:hiddenCaseId')
+  @UseGuards(RepoGuard)
   async updateResult(
     @Param('hiddenCaseId', ParseIntPipe) hiddenCaseId: number,
     @Body('hashedOutput') hashedOutput: string,
-    @Req() request
+    @Req() req: AuthenticatedRequest
   ) {
-    await this.submitService.updateResult(hiddenCaseId, hashedOutput, request)
+    await this.submitService.updateResult(
+      hiddenCaseId,
+      hashedOutput,
+      req.user.userId
+    )
 
     return { message: 'succeed' }
   }

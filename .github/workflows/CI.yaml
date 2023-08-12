@@ -83,7 +83,7 @@ jobs:
         env:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: 1234
-          POSTGRES_DB: skkuding
+          POSTGRES_DB: skku-ejs
 
     steps:
       - uses: actions/checkout@v3
@@ -103,12 +103,12 @@ jobs:
 
       - name: Check Prisma Migration
         env:
-          DATABASE_URL: postgresql://postgres:1234@127.0.0.1:5432/skkuding?schema=public
+          DATABASE_URL: postgresql://postgres:1234@127.0.0.1:5432/skku-ejs?schema=public
         run: |
           pnpm exec prisma migrate diff \
             --from-migrations ./prisma/migrations \
             --to-schema-datamodel ./prisma/schema.prisma \
-            --shadow-database-url postgresql://postgres:1234@127.0.0.1:5432/skkuding?schema=public \
+            --shadow-database-url postgresql://postgres:1234@127.0.0.1:5432/skku-ejs?schema=public \
             --exit-code
 
       - name: Check types in Typescript
@@ -117,7 +117,7 @@ jobs:
       - name: Test
         run: pnpm test
         env:
-          DATABASE_URL: postgresql://postgres:1234@localhost:5432/skkuding?schema=public
+          DATABASE_URL: postgresql://postgres:1234@localhost:5432/skku-ejs?schema=public
 
   cmake-ejs-t:
     # The CMake configure and build commands are platform agnostic and should work equally well on Windows or Mac.
