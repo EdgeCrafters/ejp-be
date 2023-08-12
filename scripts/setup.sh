@@ -55,19 +55,19 @@ sudo chown -R "$username:$username" "/home/$username"
 sudo chmod 700 "/home/$username"
 done
 
+rm -rf gitolite-admin
 cp /root/.ssh/id_rsa.pub /tmp/root.pub
 ssh git@localhost -t 'git clone https://github.com/sitaramc/gitolite && cd $HOME && mkdir -p bin && gitolite/install -to $HOME/bin && cd $HOME && $HOME/bin/gitolite setup -pk /tmp/root.pub && exit; bash'
 
-echo chmod to scripts..
+echo "chmod to scripts.."
 chmod +x ./scripts/create-new-repo.sh
 chmod +x ./scripts/add-user.sh
 chmod +x ./scripts/add-tutor.sh
 chmod +x ./scripts/create-user.sh
 
-rm -rf gitolite-admin
-echo cloning gitotlie-admin to backend..
-git clone git@localhost:gitolite-admin
 
+echo "cloning gitotlie-admin to backend.."
+git clone git@localhost:gitolite-admin
 cd gitolite-admin
 mkdir ./conf/groups
 echo 'include "groups/*.conf"' >> ./conf/gitolite.conf
@@ -77,6 +77,6 @@ git config --global user.name "Your Name"
 git add . && git commit -m "group conf-file added" && git push
 cd ..
 
-setup scripts for ejs-t & ejs-s
+echo "setup scripts for ejs-t & ejs-s"
 cd $BASEDIR
 sudo apt-get install git clang cmake g++ pkg-config libkrb5-dev libssl-dev python3
