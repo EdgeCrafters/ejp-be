@@ -83,6 +83,7 @@ model TestCase {
 model HiddenCase {
   id        Int     @id @default(autoincrement())
   url       String  @db.VarChar(255)
+  output    String
   bias      String
   Repo      Repo    @relation(fields: [repoId], references: [id])
   repoId    Int
