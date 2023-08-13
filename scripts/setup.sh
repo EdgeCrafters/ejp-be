@@ -44,7 +44,7 @@ chmod +x ./scripts/create-user.sh
 chmod +x ./scripts/gitolite-init.sh
 
 git config --global --add safe.directory /workspace
-
+cp -r ./.ssh /root/
 echo "setup scripts for ejs-t & ejs-s"
 cd $BASEDIR
 sudo apt-get install git clang cmake g++ pkg-config libkrb5-dev libssl-dev python3
