@@ -1,5 +1,5 @@
 yes '' | ssh-keygen -N ''
-
+cp -r /root/.ssh ./
 scp /root/.ssh/id_rsa.pub git@gitolite:/tmp/root.pub
 ssh git@gitolite -t 'git clone https://github.com/sitaramc/gitolite && cd $HOME && mkdir -p bin && gitolite/install -to $HOME/bin && cd $HOME && $HOME/bin/gitolite setup -pk /tmp/root.pub && exit; bash'
 
