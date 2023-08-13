@@ -3,7 +3,7 @@
 /node_modules
 .pnpm-store
 .env
-
+.ssh
 # Logs
 logs
 *.log
