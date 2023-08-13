@@ -10,7 +10,5 @@ cd gitolite-admin
 mkdir ./conf/groups
 echo 'include "groups/*.conf"' >> ./conf/gitolite.conf
 echo -n '@tutors = ' >> ./conf/groups/tutors.conf
-git config --global user.email "you@example.com"
-git config --global user.name "Your Name"
 git add . && git commit -m "group conf-file added" && git push
 cd ..
