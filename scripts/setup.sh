@@ -36,12 +36,13 @@ do
   sleep 5
 done
 
+echo installing ssh-server settings..
 sudo apt-get update
 sudo apt-get install -y openssh-server ssh-client
 service ssh restart
 yes '' | ssh-keygen -N ''
 
-
+echo setting git user..
 usernames=("git" "testuser")
 for username in "${usernames[@]}"
 do
@@ -54,42 +55,28 @@ sudo chown -R "$username:$username" "/home/$username"
 sudo chmod 700 "/home/$username"
 done
 
+rm -rf gitolite-admin
 cp /root/.ssh/id_rsa.pub /tmp/root.pub
 ssh git@localhost -t 'git clone https://github.com/sitaramc/gitolite && cd $HOME && mkdir -p bin && gitolite/install -to $HOME/bin && cd $HOME && $HOME/bin/gitolite setup -pk /tmp/root.pub && exit; bash'
 
-
+echo "chmod to scripts.."
 chmod +x ./scripts/create-new-repo.sh
 chmod +x ./scripts/add-user.sh
 chmod +x ./scripts/add-tutor.sh
 chmod +x ./scripts/create-user.sh
 
-git clone git@localhost:gitolite-admin
 
+echo "cloning gitotlie-admin to backend.."
+git clone git@localhost:gitolite-admin
 cd gitolite-admin
 mkdir ./conf/groups
 echo 'include "groups/*.conf"' >> ./conf/gitolite.conf
 echo -n '@tutors = ' >> ./conf/groups/tutors.conf
 git config --global user.email "you@example.com"
 git config --global user.name "Your Name"
-git add . && git commit -m "group conffile added" && git push
+git add . && git commit -m "group conf-file added" && git push
 cd ..
 
-
-# ssh-copy-id -i ~/.ssh/id_rsa.pub gitolite@localhost 
-# ssh-copy-id -i ~/.ssh/id_rsa.pub git-repo@localhost
-  
-
-# ssh -t git-repo@localhost 'git clone https://github.com/sitaramc/gitolite.git && ./gitolite/install && exit; bash' 
-
-
-# ssh -t gitolite@localhost  ' (yes "" | ssh-keygen -N "") && scp ~/.ssh/id_rsa.pub git-repo@localhost:/home/git-repo/.ssh/gitolite.pub && exit; bash'
-
-# ssh -t git-repo@localhost './gitolite/src/gitolite setup -pk ./.ssh/gitolite.pub && exit; bash'
-
-# ssh -t gitolite@localhost 'git clone git-repo@localhost:gitolite-admin.git && exit; bash'
-
-
-
-# setup scripts for ejs-t & ejs-s
+echo "setup scripts for ejs-t & ejs-s"
 cd $BASEDIR
 sudo apt-get install git clang cmake g++ pkg-config libkrb5-dev libssl-dev python3

@@ -3,6 +3,7 @@ import { AuthController } from './auth.controller'
 import { expect } from 'chai'
 import { AuthService } from './auth.service'
 import { PrismaService } from 'src/prisma/prisma.service'
+import { ReposService } from 'src/repos/repos.service'
 
 describe('AuthController', () => {
   let controller: AuthController
@@ -10,7 +11,7 @@ describe('AuthController', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [AuthController],
-      providers: [AuthService, { provide: PrismaService, useValue: {} }]
+      providers: [AuthService, { provide: PrismaService, useValue: {} }, ReposService]
     }).compile()
 
     controller = module.get<AuthController>(AuthController)
