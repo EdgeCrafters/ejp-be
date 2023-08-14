@@ -7,7 +7,7 @@ import { PrismaService } from '../prisma/prisma.service'
 import * as argon2 from 'argon2'
 import { Role } from '@prisma/client'
 import type { CreateRepoDto } from './dtos/createRepo.dto'
-import { AddUserToRepoDto } from './dtos/addUserToRepo.dto'
+import type { AddUserToRepoDto } from './dtos/addUserToRepo.dto'
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const { exec } = require('child_process')
 
