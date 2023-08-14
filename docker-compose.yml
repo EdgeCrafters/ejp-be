@@ -7,7 +7,6 @@ services:
     image: mcr.microsoft.com/vscode/devcontainers/typescript-node:18-bullseye
     ports:
       - 4000:4000
-      - 22:22
     volumes:
       - .:/workspace:cached
     stdin_open: true
@@ -23,3 +22,8 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: 1234
       POSTGRES_DB: skku
+  sshd:
+    container_name: gitolite
+    build: .
+    ports:
+      - 22:22

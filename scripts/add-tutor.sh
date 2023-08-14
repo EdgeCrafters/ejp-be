@@ -9,7 +9,7 @@ cd ./gitolite-admin/conf/groups
 echo -n "$user_name " >> tutors.conf
 cd ../../keydir
 echo "$secret_key1 $secret_key2 $secret_key3" >> $user_name.pub 
-git add .
+git add ./$user_name.pub ../conf/groups/tutors.conf
 git commit -m "$user_name tutor added"
 git push
 cd ../../..
