@@ -80,11 +80,11 @@
             "colId": "2fe4be4c-377e-4cb2-a7f7-8ca6feb101fa",
             "containerId": "f647db14-f0c2-45c2-b9e8-50d0b140be51",
             "name": "createUser",
-            "url": "/repos",
+            "url": "/auth/createuser",
             "method": "POST",
             "sortNum": 40000,
             "created": "2023-08-12T11:57:04.103Z",
-            "modified": "2023-08-13T14:25:55.244Z",
+            "modified": "2023-08-14T05:48:05.275Z",
             "headers": [],
             "params": [],
             "body": {
