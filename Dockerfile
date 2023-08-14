@@ -9,7 +9,7 @@ ARG username=git
 ARG HOME=/home/git
 ARG GITOLITE_HOME_PATH=/var/lib/gitolite
 ENV SSHD_HOST_KEYS_DIR=/etc/ssh/host_keys
-ENV LC_ALL=C.UTF-8
+
 RUN apt-get update \
     &&  apt-get install --no-install-recommends --yes \
         git=$GIT_PACKAGE_VERSION \
@@ -28,10 +28,7 @@ RUN apt-get update \
     && mkdir -p /var/run/sshd \
     && echo "mkdir -p /var/run/sshd" >> /etc/rc.local \
     && git config --global http.sslverify false \
-    && export LANGUAGE=en_US.UTF-8 \
-    && export LC_ALL=en_US.UTF-8 \
-    && locale-gen en_US en_US.UTF-8 \
-    && dpkg-reconfigure locales
+    && locale-gen en_US.UTF-8 
 WORKDIR $HOME
 USER $USER
 CMD ["/usr/sbin/sshd", "-D", "-e"]
