@@ -1,35 +1,32 @@
-import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common'
+import { Body, Controller, Get, Post, Put } from '@nestjs/common'
 import { ReposService } from './repos.service'
 import { Roles } from 'src/common/decorator/roles.decorator'
 import { Role } from '@prisma/client'
-import { Public } from 'src/common/decorator/public.decorator'
+import { CreateRepoDto } from './dtos/createRepo.dto'
+import { CommonResponseDto } from 'src/common/dtos/common-response.dto'
+import { AddUserToRepoDto } from './dtos/addUserToRepo.dto'
 @Controller('repos')
 export class ReposController {
   constructor(private readonly reposService: ReposService) {}
 
   @Roles(Role.Tutor)
-  @Post(':repoName')
-  async createRepo(@Param('repoName') repoName: string) {
-    const newRepo = await this.reposService.createNewRepo(repoName)
-    return { repoId: newRepo.id }
+  @Post()
+  async createRepo(@Body() createRepoDto: CreateRepoDto) {
+    const newRepo = await this.reposService.createNewRepo(createRepoDto)
+    return new CommonResponseDto({ repoId: newRepo.id })
   }
 
   @Roles(Role.Tutor)
   @Put()
-  async addUserToRepo(@Body() body) {
-    return await this.reposService.addUserToRepo(body)
+  async addUserToRepo(@Body() addUserToRepoDto: AddUserToRepoDto) {
+    await this.reposService.addUserToRepo(addUserToRepoDto)
+    return new CommonResponseDto()
   }
 
   @Roles(Role.Tutor)
   @Get()
   async getAllRepos() {
-    return await this.reposService.getAllRepos()
-  }
-
-  @Public()
-  @Post()
-  async createUser(@Body() body) {
-    await this.reposService.createUser(body)
-    return { msg: 'success' }
+    const allRepos = await this.reposService.getAllRepos()
+    return new CommonResponseDto(allRepos)
   }
 }
