@@ -77,13 +77,7 @@ export class ReposService {
   }
 
   async getAllRepos() {
-    const repos = await this.prismaService.repo.findMany({
-      select: {
-        name: true
-      }
-    })
-
-    return repos
+    return await this.prismaService.repo.findMany()
   }
 
   async createUser(body) {
