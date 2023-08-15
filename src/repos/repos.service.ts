@@ -6,7 +6,8 @@ import {
 import { PrismaService } from '../prisma/prisma.service'
 import * as argon2 from 'argon2'
 import { Role } from '@prisma/client'
-import e from 'express'
+import type { CreateRepoDto } from './dtos/createRepo.dto'
+import type { AddUserToRepoDto } from './dtos/addUserToRepo.dto'
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const { exec } = require('child_process')
 
@@ -14,7 +15,8 @@ const { exec } = require('child_process')
 export class ReposService {
   constructor(private readonly prismaService: PrismaService) {}
 
-  async createNewRepo(repoName: string) {
+  async createNewRepo(createRepoDto: CreateRepoDto) {
+    const repoName = createRepoDto.repoName
     const repoExist = await this.prismaService.repo.findFirst({
       where: {
         name: repoName
@@ -40,8 +42,8 @@ export class ReposService {
   }
 
   //gitolite-admim의 repo에 학생 등록
-  async addUserToRepo(body) {
-    const { repoId, userId } = body
+  async addUserToRepo(addUserToRepoDto: AddUserToRepoDto) {
+    const { repoId, userId } = addUserToRepoDto
     try {
       await this.prismaService.$transaction(async (tx) => {
         const user = await tx.user.findFirst({
@@ -51,7 +53,7 @@ export class ReposService {
         })
         const repo = await tx.repo.findFirst({
           where: {
-            id: parseInt(repoId)
+            id: repoId
           }
         })
         await tx.userRepo.create({
@@ -74,14 +76,25 @@ export class ReposService {
     return 'success'
   }
 
-  async getAllRepos() {
-    const repos = await this.prismaService.repo.findMany({
-      select: {
-        name: true
+  async getAllRepos(userId: number) {
+    const user = await this.prismaService.user.findUnique({
+      where: {
+        id: userId
       }
     })
-
-    return repos
+    if (user.role === Role.Tutor) {
+      return await this.prismaService.repo.findMany()
+    } else {
+      return await this.prismaService.repo.findMany({
+        where: {
+          UserRepo: {
+            some: {
+              userId
+            }
+          }
+        }
+      })
+    }
   }
 
   async createUser(body) {
