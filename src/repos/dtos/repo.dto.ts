@@ -3,7 +3,7 @@ export class RepoDto {
   repoName: string
 
   constructor(repoDto) {
-    this.repoId = repoDto.id
-    this.repoName = repoDto.name
+    this.repoId = repoDto.repo.id
+    this.repoName = repoDto.repo.name
   }
 }

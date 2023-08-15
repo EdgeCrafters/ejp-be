@@ -36,8 +36,7 @@ export class ReposController {
     return new CommonResponseDto()
   }
 
-  @Roles(Role.Tutor)
-  @Roles(Role.Student)
+
   @Get()
   async getAllRepos(@Req() req: AuthenticatedRequest) {
     const allRepos = await this.reposService.getAllRepos(req.user.userId)
