@@ -76,8 +76,21 @@ export class ReposService {
     return 'success'
   }
 
-  async getAllRepos() {
-    return await this.prismaService.repo.findMany()
+  async getAllRepos(userId: number) {
+    const user = await this.prismaService.user.findUnique({
+      where: {
+        id: userId
+      }
+    })
+    if (user.role === Role.Tutor) {
+      return await this.prismaService.repo.findMany()
+    } else {
+      return await this.prismaService.userRepo.findMany({
+        where: {
+          userId: userId
+        }
+      })
+    }
   }
 
   async createUser(body) {

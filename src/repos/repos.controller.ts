@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Post, Put } from '@nestjs/common'
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  Put,
+  Req,
+  UseGuards
+} from '@nestjs/common'
 import { ReposService } from './repos.service'
 import { Roles } from 'src/common/decorator/roles.decorator'
 import { Role } from '@prisma/client'
@@ -7,6 +15,9 @@ import { CommonResponseDto } from 'src/common/dtos/common-response.dto'
 import { AddUserToRepoDto } from './dtos/addUserToRepo.dto'
 import { RepoDto } from './dtos/repo.dto'
 import { Content } from 'src/common/dtos/content-wrapper.dto'
+import { RepoGuard } from 'src/problem/guards/repo.guard'
+import { AuthenticatedRequest } from 'src/common/interface/authenticated-request.interface'
+
 @Controller('repos')
 export class ReposController {
   constructor(private readonly reposService: ReposService) {}
@@ -26,9 +37,10 @@ export class ReposController {
   }
 
   @Roles(Role.Tutor)
+  @Roles(Role.Student)
   @Get()
-  async getAllRepos() {
-    const allRepos = await this.reposService.getAllRepos()
+  async getAllRepos(@Req() req: AuthenticatedRequest) {
+    const allRepos = await this.reposService.getAllRepos(req.user.userId)
     const repoDto = new Content(
       allRepos.map((repo) => {
         return new RepoDto(repo)
