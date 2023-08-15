@@ -85,19 +85,10 @@ export class ReposService {
     if (user.role === Role.Tutor) {
       return await this.prismaService.repo.findMany()
     } else {
-      // return await this.prismaService.userRepo.findMany({
-      //   where: {
-      //     userId: userId
-      //   },
-      //   include: {
-      //     repo: true
-      //   }
-      // })
-
       return await this.prismaService.repo.findMany({
         where: {
           UserRepo: {
-            every: {
+            some: {
               userId
             }
           }
