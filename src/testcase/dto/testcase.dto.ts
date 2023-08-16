@@ -1,4 +1,11 @@
-import { IsOptional, IsString } from 'class-validator'
+import { Type } from 'class-transformer'
+import {
+  IsInt,
+  IsNotEmpty,
+  IsOptional,
+  IsPositive,
+  IsString
+} from 'class-validator'
 
 export class UpdateTestcaseDTO {
   @IsString()
@@ -10,4 +17,28 @@ export class UpdateHiddencaseDTO extends UpdateTestcaseDTO {
   @IsString()
   @IsOptional()
   bias?: string
+}
+
+export class CreateTestcaseDto extends UpdateTestcaseDTO {
+  @IsNotEmpty()
+  @Type(() => Number)
+  @IsInt()
+  @IsPositive()
+  problemId: number
+
+  @IsNotEmpty()
+  @Type(() => Number)
+  @IsInt()
+  @IsPositive()
+  repoId: number
+}
+
+export class CreateHiddencaseDto extends CreateTestcaseDto {
+  @IsNotEmpty()
+  @IsString()
+  output: string
+
+  @IsNotEmpty()
+  @IsString()
+  bias: string
 }

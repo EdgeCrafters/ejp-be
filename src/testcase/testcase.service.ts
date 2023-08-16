@@ -1,6 +1,11 @@
 import { Injectable } from '@nestjs/common'
 import { PrismaService } from 'src/prisma/prisma.service'
-import type { UpdateHiddencaseDTO, UpdateTestcaseDTO } from './dto/testcase.dto'
+import type {
+  CreateTestcaseDto,
+  UpdateHiddencaseDTO,
+  UpdateTestcaseDTO,
+  CreateHiddencaseDto
+} from './dto/testcase.dto'
 import { ProblemService } from 'src/problem/problem.service'
 import type { TestCase, HiddenCase } from '@prisma/client'
 
@@ -73,5 +78,31 @@ export class TestcaseService {
     }
 
     return await this.problemService.isMemberOfRepo(userId, repo.repoId)
+  }
+
+  async createTestcase(createTestcaseDto: CreateTestcaseDto) {
+    const { url, problemId, repoId } = createTestcaseDto
+    await this.prisma.testCase.create({
+      data: {
+        problemId,
+        repoId,
+        ...(url && { url })
+      }
+    })
+    return
+  }
+
+  async createHiddencase(createHiddencaseDto: CreateHiddencaseDto) {
+    const { url, bias, problemId, output, repoId } = createHiddencaseDto
+    await this.prisma.hiddenCase.create({
+      data: {
+        ...(url && { url }),
+        bias,
+        problemId,
+        output,
+        repoId
+      }
+    })
+    return
   }
 }
