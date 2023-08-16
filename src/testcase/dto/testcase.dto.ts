@@ -25,6 +25,12 @@ export class CreateTestcaseDto extends UpdateTestcaseDTO {
   @IsInt()
   @IsPositive()
   problemId: number
+
+  @IsNotEmpty()
+  @Type(() => Number)
+  @IsInt()
+  @IsPositive()
+  repoId: number
 }
 
 export class CreateHiddencaseDto extends CreateTestcaseDto {
