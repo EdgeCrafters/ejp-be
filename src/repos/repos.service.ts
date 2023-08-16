@@ -8,15 +8,18 @@ import * as argon2 from 'argon2'
 import { Role } from '@prisma/client'
 import type { CreateRepoDto } from './dtos/createRepo.dto'
 import type { AddUserToRepoDto } from './dtos/addUserToRepo.dto'
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const { exec } = require('child_process')
+import { MinioService } from 'nestjs-minio-client'
+import { MinioClientService } from 'src/minio/minio.service'
 
 @Injectable()
 export class ReposService {
-  constructor(private readonly prismaService: PrismaService) {}
+  constructor(
+    private readonly prismaService: PrismaService,
+    private readonly minio: MinioClientService
+  ) {}
 
   async createNewRepo(createRepoDto: CreateRepoDto) {
-    const repoName = createRepoDto.repoName
+    const repoName = createRepoDto.repoName.toLowerCase()
     const repoExist = await this.prismaService.repo.findFirst({
       where: {
         name: repoName
@@ -26,12 +29,9 @@ export class ReposService {
       throw new BadRequestException('이미 존재하는 repo입니다')
     }
     const newRepo = await this.prismaService.$transaction(async (tx) => {
-      exec(
-        `./scripts/create-new-repo.sh ${repoName}`,
-        (error, stdout, stderr) => {
-          console.log(error, stdout, stderr)
-        }
-      )
+      //minio에서 버킷(레포) 생성
+      await this.minio.listBucket()
+      await this.minio.makeBucket(repoName)
       return await tx.repo.create({
         data: {
           name: repoName
@@ -41,7 +41,6 @@ export class ReposService {
     return newRepo
   }
 
-  //gitolite-admim의 repo에 학생 등록
   async addUserToRepo(addUserToRepoDto: AddUserToRepoDto) {
     const { repoId, userId } = addUserToRepoDto
     try {
@@ -62,12 +61,6 @@ export class ReposService {
             repoId: repoId
           }
         })
-        exec(
-          `./scripts/add-user.sh ${user.username} ${repo.name}`,
-          (error, stdout, stderr) => {
-            console.log(error, stdout, stderr)
-          }
-        )
       })
     } catch (e) {
       console.log({ e })
@@ -110,26 +103,6 @@ export class ReposService {
             sshKey: ssh
           }
         })
-
-        if (role == Role.Tutor) {
-          console.log('add-tutor script running..')
-          exec(
-            `./scripts/add-tutor.sh ${username} ${ssh}`,
-            (error, stdout, stderr) => {
-              console.log(error, stdout, stderr)
-            }
-          )
-        } else if (role == Role.Student) {
-          console.log('create-user script running..')
-          exec(
-            `./scripts/create-user.sh ${username} ${ssh}`,
-            (error, stdout, stderr) => {
-              console.log(error, stdout, stderr)
-            }
-          )
-        } else {
-          throw new BadRequestException('올바른 role이 아닙니다.')
-        }
       })
     } catch (e) {
       throw new BadRequestException('이미 존재하는 사용자입니다')
