@@ -3,7 +3,10 @@
 /node_modules
 .pnpm-store
 .env
-.ssh
+
+#minio config
+.minio.sys
+
 # Logs
 logs
 *.log
