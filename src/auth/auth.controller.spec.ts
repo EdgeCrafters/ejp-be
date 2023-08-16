@@ -4,6 +4,7 @@ import { expect } from 'chai'
 import { AuthService } from './auth.service'
 import { PrismaService } from 'src/prisma/prisma.service'
 import { ReposService } from 'src/repos/repos.service'
+import { MinioClientService } from 'src/minio/minio.service'
 
 describe('AuthController', () => {
   let controller: AuthController
@@ -14,7 +15,8 @@ describe('AuthController', () => {
       providers: [
         AuthService,
         { provide: PrismaService, useValue: {} },
-        ReposService
+        ReposService,
+        { provide: MinioClientService, useValue: {} }
       ]
     }).compile()
 

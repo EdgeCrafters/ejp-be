@@ -2,7 +2,7 @@
   "name": "skku-ejs",
   "dockerComposeFile": "../docker-compose.yml",
   "service": "app",
-  "runServices": ["app", "dev-db", "sshd"],
+  "runServices": ["app", "dev-db", "minio"],
   "workspaceFolder": "/workspace",
   "postCreateCommand": "scripts/setup.sh",
   "customizations": {

@@ -14,10 +14,13 @@ BASEDIR=$(dirname $(dirname $(realpath $0)))
 cd $BASEDIR
 
 # Generate env file
-echo "DATABASE_URL=\"postgresql://postgres:1234@skku-ejs-dev-db:5432/skku?schema=public\"" >> .env
+echo "DATABASE_URL=\"postgresql://postgres:1234@skku-ejs-dev-db:5432/skku?schema=public\"" > .env
 echo "PORT=4000" >> .env
 echo "SESSION_SECRET=ASD3FCV3XDSI5MVQWR643LKW23EQFLM" >> .env
-
+echo "MINIO_PORT=9000" >> .env
+echo "MINIO_END_POINT=skku-ejs-dev-minio" >> .env
+echo "MINIO_ACCESS_KEY=minioadmin" >> .env
+echo "MINIO_SECRET_KEY=minioadmin" >> .env
 # Install pnpm and Node.js packages
 npm install -g pnpm@latest
 pnpm install
@@ -35,16 +38,3 @@ do
   echo -e '\n⚠️ Failed to migrate. Waiting for db to be ready...\n'
   sleep 5
 done
-
-echo "chmod to scripts.."
-chmod +x ./scripts/create-new-repo.sh
-chmod +x ./scripts/add-user.sh
-chmod +x ./scripts/add-tutor.sh
-chmod +x ./scripts/create-user.sh
-chmod +x ./scripts/gitolite-init.sh
-
-git config --global --add safe.directory /workspace
-cp -r ./.ssh /root/
-echo "setup scripts for ejs-t & ejs-s"
-cd $BASEDIR
-sudo apt-get install git clang cmake g++ pkg-config libkrb5-dev libssl-dev python3
