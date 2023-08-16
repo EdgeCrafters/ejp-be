@@ -74,8 +74,8 @@ model Problem {
 model TestCase {
   id        Int     @id @default(autoincrement())
   url       String  @db.VarChar(255)
-  Repo      Repo    @relation(fields: [repoId], references: [id], onDelete: Cascade)
-  repoId    Int
+  Repo      Repo?   @relation(fields: [repoId], references: [id], onDelete: Cascade)
+  repoId    Int?
   Problem   Problem @relation(fields: [problemId], references: [id], onDelete: Cascade)
   problemId Int
 }
@@ -85,8 +85,8 @@ model HiddenCase {
   url       String  @db.VarChar(255)
   output    String
   bias      String
-  Repo      Repo    @relation(fields: [repoId], references: [id])
-  repoId    Int
+  Repo      Repo?   @relation(fields: [repoId], references: [id])
+  repoId    Int?
   Problem   Problem @relation(fields: [problemId], references: [id], onDelete: Cascade)
   problemId Int
 
