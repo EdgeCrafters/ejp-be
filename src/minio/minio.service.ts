@@ -1,5 +1,9 @@
 import { ConfigService } from '@nestjs/config'
-import { BadRequestException, Injectable, InternalServerErrorException } from '@nestjs/common'
+import {
+  BadRequestException,
+  Injectable,
+  InternalServerErrorException
+} from '@nestjs/common'
 import * as Minio from 'minio'
 import { MinioService } from 'nestjs-minio-client'
 
@@ -21,13 +25,13 @@ export class MinioClientService {
       // throw new InternalServerErrorException(e)
     })
   }
-  async listBucket(){
-    await this.minioClient.listBuckets(function(err, buckets) {
+  async listBucket() {
+    await this.minioClient.listBuckets(function (err, buckets) {
       if (err) return console.log(err)
       console.log('buckets :', buckets)
     })
   }
-  
+
   async uploadFile(
     key: string,
     file: Buffer,
