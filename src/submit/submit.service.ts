@@ -10,10 +10,6 @@ import { PrismaService } from 'src/prisma/prisma.service'
 export class SubmitService {
   constructor(private readonly prismaService: PrismaService) {}
 
-  async getBias(hiddenCaseId: number): Promise<string> {
-    return (await this.getHiddenCase(hiddenCaseId)).bias
-  }
-
   async updateResult(
     hiddenCaseId: number,
     hashedOutput: string,
