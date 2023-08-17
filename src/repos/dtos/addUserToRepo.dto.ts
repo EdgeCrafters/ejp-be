@@ -1,5 +1,5 @@
 import { Type } from 'class-transformer'
-import { IsInt, IsNotEmpty, IsPositive, IsString } from 'class-validator'
+import { IsInt, IsNotEmpty, IsPositive } from 'class-validator'
 
 export class AddUserToRepoDto {
   @IsNotEmpty()

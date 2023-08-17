@@ -4,7 +4,7 @@ import {
   Injectable,
   InternalServerErrorException
 } from '@nestjs/common'
-import * as Minio from 'minio'
+import type * as Minio from 'minio'
 import { MinioService } from 'nestjs-minio-client'
 
 @Injectable()
@@ -19,14 +19,17 @@ export class MinioClientService {
     this.minioClient = this.minioService.client
     this.bucket = this.configService.get('MINIO_BUCKET_NAME')
   }
-  async makeBucket(repoName: string) {
-    await this.minioClient.makeBucket(repoName, (e) => {
-      console.log(e)
-      // throw new InternalServerErrorException(e)
+
+  makeBucket(repoName: string) {
+    this.minioClient.makeBucket(repoName, (error) => {
+      if (error) {
+        throw new InternalServerErrorException(error)
+      }
     })
   }
-  async listBucket() {
-    await this.minioClient.listBuckets(function (err, buckets) {
+
+  listBucket() {
+    this.minioClient.listBuckets(function (err, buckets) {
       if (err) return console.log(err)
       console.log('buckets :', buckets)
     })

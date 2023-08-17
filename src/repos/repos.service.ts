@@ -8,7 +8,6 @@ import * as argon2 from 'argon2'
 import { Role } from '@prisma/client'
 import type { CreateRepoDto } from './dtos/createRepo.dto'
 import type { AddUserToRepoDto } from './dtos/addUserToRepo.dto'
-import { MinioService } from 'nestjs-minio-client'
 import { MinioClientService } from 'src/minio/minio.service'
 
 @Injectable()
@@ -45,12 +44,12 @@ export class ReposService {
     const { repoId, userId } = addUserToRepoDto
     try {
       await this.prismaService.$transaction(async (tx) => {
-        const user = await tx.user.findFirst({
+        await tx.user.findFirst({
           where: {
             id: userId
           }
         })
-        const repo = await tx.repo.findFirst({
+        await tx.repo.findFirst({
           where: {
             id: repoId
           }
