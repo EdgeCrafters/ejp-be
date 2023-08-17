@@ -63,7 +63,7 @@ model Problem {
   id         Int          @id @default(autoincrement())
   title      String       @db.VarChar(255)
   text       String       @db.Text
-  uuid       String       @db.VarChar(255) @default("null")
+  uuid       String       @default("null") @db.VarChar(255)
   score      Score[]
   testCase   TestCase[]
   hiddenCase HiddenCase[]
@@ -74,6 +74,8 @@ model Problem {
 model TestCase {
   id        Int     @id @default(autoincrement())
   url       String  @db.VarChar(255)
+  input     String  @db.Text
+  output    String  @db.Text
   Repo      Repo    @relation(fields: [repoId], references: [id], onDelete: Cascade)
   repoId    Int
   Problem   Problem @relation(fields: [problemId], references: [id], onDelete: Cascade)
@@ -83,8 +85,8 @@ model TestCase {
 model HiddenCase {
   id        Int     @id @default(autoincrement())
   url       String  @db.VarChar(255)
-  output    String
-  bias      String
+  input     String  @db.Text
+  output    String  @db.Text
   Repo      Repo    @relation(fields: [repoId], references: [id])
   repoId    Int
   Problem   Problem @relation(fields: [problemId], references: [id], onDelete: Cascade)
