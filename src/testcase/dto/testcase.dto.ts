@@ -13,11 +13,7 @@ export class UpdateTestcaseDTO {
   url?: string
 }
 
-export class UpdateHiddencaseDTO extends UpdateTestcaseDTO {
-  @IsString()
-  @IsOptional()
-  bias?: string
-}
+export class UpdateHiddencaseDTO extends UpdateTestcaseDTO {}
 
 export class CreateTestcaseDto extends UpdateTestcaseDTO {
   @IsNotEmpty()
@@ -31,14 +27,14 @@ export class CreateTestcaseDto extends UpdateTestcaseDTO {
   @IsInt()
   @IsPositive()
   repoId: number
-}
 
-export class CreateHiddencaseDto extends CreateTestcaseDto {
+  @IsNotEmpty()
+  @IsString()
+  input: string
+
   @IsNotEmpty()
   @IsString()
   output: string
-
-  @IsNotEmpty()
-  @IsString()
-  bias: string
 }
+
+export class CreateHiddencaseDto extends CreateTestcaseDto {}

@@ -81,11 +81,13 @@ export class TestcaseService {
   }
 
   async createTestcase(createTestcaseDto: CreateTestcaseDto) {
-    const { url, problemId, repoId } = createTestcaseDto
+    const { url, problemId, repoId, input, output } = createTestcaseDto
     await this.prisma.testCase.create({
       data: {
         problemId,
         repoId,
+        input,
+        output,
         ...(url && { url })
       }
     })
@@ -93,13 +95,13 @@ export class TestcaseService {
   }
 
   async createHiddencase(createHiddencaseDto: CreateHiddencaseDto) {
-    const { url, bias, problemId, output, repoId } = createHiddencaseDto
+    const { url, input, problemId, output, repoId } = createHiddencaseDto
     await this.prisma.hiddenCase.create({
       data: {
         ...(url && { url }),
-        bias,
-        problemId,
+        input,
         output,
+        problemId,
         repoId
       }
     })
