@@ -37,7 +37,8 @@
     "passport": "^0.6.0",
     "passport-local": "^1.0.0",
     "reflect-metadata": "^0.1.13",
-    "rxjs": "^7.8.1"
+    "rxjs": "^7.8.1",
+    "uuid": "^9.0.0"
   },
   "devDependencies": {
     "@nestjs/cli": "^10.0.0",
@@ -51,6 +52,7 @@
     "@types/express-session": "^1.17.7",
     "@types/minio": "^7.1.1",
     "@types/mocha": "^10.0.1",
+    "@types/multer": "^1.4.7",
     "@types/node": "^20.3.1",
     "@types/sinon": "^10.0.15",
     "@types/supertest": "^2.0.12",

@@ -60,10 +60,10 @@ model Score {
 }
 
 model Problem {
-  id    Int    @id @default(autoincrement())
-  title String @db.VarChar(255)
-  text  String @db.Text
-
+  id         Int          @id @default(autoincrement())
+  title      String       @db.VarChar(255)
+  text       String       @db.Text
+  uuid       String       @db.VarChar(255) @default("null")
   score      Score[]
   testCase   TestCase[]
   hiddenCase HiddenCase[]

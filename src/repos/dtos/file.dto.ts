@@ -1,16 +1,10 @@
 import { Type } from 'class-transformer'
 import { IsInt, IsNotEmpty, IsPositive } from 'class-validator'
 
-export class AddUserToRepoDto {
+export class FileDto {
   @IsNotEmpty()
   @Type(() => Number)
   @IsInt()
   @IsPositive()
-  repoId: number
-
-  @IsNotEmpty()
-  @Type(() => Number)
-  @IsInt()
-  @IsPositive()
-  userId: number
+  problemId: number
 }
