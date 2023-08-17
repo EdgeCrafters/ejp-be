@@ -1,4 +1,13 @@
-import { Body, Controller, Get, Post, Put, Req } from '@nestjs/common'
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  Put,
+  Req,
+  UploadedFile,
+  UseInterceptors
+} from '@nestjs/common'
 import { ReposService } from './repos.service'
 import { Roles } from 'src/common/decorator/roles.decorator'
 import { Role } from '@prisma/client'
@@ -8,7 +17,9 @@ import { AddUserToRepoDto } from './dtos/addUserToRepo.dto'
 import { RepoDto } from './dtos/repo.dto'
 import { Content } from 'src/common/dtos/content-wrapper.dto'
 import { AuthenticatedRequest } from 'src/common/interface/authenticated-request.interface'
-
+import { Express } from 'express'
+import { FileInterceptor } from '@nestjs/platform-express'
+import { FileDto } from './dtos/file.dto'
 @Controller('repos')
 export class ReposController {
   constructor(private readonly reposService: ReposService) {}
@@ -36,5 +47,16 @@ export class ReposController {
       })
     )
     return new CommonResponseDto(repoDto)
+  }
+
+  @Roles(Role.Tutor)
+  @Post('/files')
+  @UseInterceptors(FileInterceptor('file'))
+  async createFile(
+    @UploadedFile() uploadedFile: Express.Multer.File,
+    @Body() fileDto: FileDto
+  ) {
+    await this.reposService.createFile(uploadedFile, fileDto)
+    return new CommonResponseDto()
   }
 }

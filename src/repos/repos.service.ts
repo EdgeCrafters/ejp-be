@@ -9,7 +9,8 @@ import { Role } from '@prisma/client'
 import type { CreateRepoDto } from './dtos/createRepo.dto'
 import type { AddUserToRepoDto } from './dtos/addUserToRepo.dto'
 import { MinioClientService } from 'src/minio/minio.service'
-
+import { v1 } from 'uuid'
+import type { FileDto } from './dtos/file.dto'
 @Injectable()
 export class ReposService {
   constructor(
@@ -108,5 +109,51 @@ export class ReposService {
     }
 
     return
+  }
+
+  async createFile(uploadedFile: Express.Multer.File, fileDto: FileDto) {
+    try {
+      return await this.prismaService.$transaction(
+        async (tx) => {
+          const { originalname, mimetype, size, buffer } = uploadedFile
+          const createdAt = new Date()
+          const key = v1()
+          const problem = await this.prismaService.problem.findFirst({
+            where: {
+              id: fileDto.problemId
+            },
+            include: {
+              Repo: true
+            }
+          })
+          await this.minio.uploadFile(
+            key,
+            buffer,
+            size,
+            createdAt,
+            Buffer.from(originalname, 'latin1').toString('utf8'),
+            mimetype,
+            problem.Repo.name
+          )
+          return await tx.problem.update({
+            where: {
+              id: fileDto.problemId
+            },
+            data: {
+              uuid: key
+            }
+          })
+        },
+        {
+          maxWait: 7000,
+          timeout: 7000
+        }
+      )
+    } catch (error) {
+      console.log(error)
+      throw new InternalServerErrorException(
+        '파일 업로드에 문제가 발생하였습니다'
+      )
+    }
   }
 }
