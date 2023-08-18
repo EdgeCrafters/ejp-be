@@ -36,8 +36,14 @@ export class ReposController {
 
   @Roles(Role.Tutor)
   @Post()
-  async createRepo(@Body() createRepoDto: CreateRepoDto) {
-    const newRepo = await this.reposService.createNewRepo(createRepoDto)
+  async createRepo(
+    @Body() createRepoDto: CreateRepoDto,
+    @Req() req: AuthenticatedRequest
+  ) {
+    const newRepo = await this.reposService.createNewRepo(
+      createRepoDto,
+      req.user.userId
+    )
     return new CommonResponseDto({ repoId: newRepo.id })
   }
 

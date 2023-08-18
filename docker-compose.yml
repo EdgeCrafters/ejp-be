@@ -7,6 +7,8 @@ services:
     image: mcr.microsoft.com/vscode/devcontainers/typescript-node:18-bullseye
     ports:
       - 4000:4000
+    expose:
+      - 4000
     volumes:
       - .:/workspace:cached
     stdin_open: true

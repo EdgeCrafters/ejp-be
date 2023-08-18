@@ -33,7 +33,7 @@ export class ReposService {
     })
   }
 
-  async createNewRepo(createRepoDto: CreateRepoDto) {
+  async createNewRepo(createRepoDto: CreateRepoDto, userId: number) {
     const repoName = createRepoDto.repoName.toLowerCase()
     const repoExist = await this.prismaService.repo.findFirst({
       where: {
@@ -49,7 +49,12 @@ export class ReposService {
       await this.minio.makeBucket(repoName)
       return await tx.repo.create({
         data: {
-          name: repoName
+          name: repoName,
+          UserRepo: {
+            create: {
+              userId: userId
+            }
+          }
         }
       })
     })

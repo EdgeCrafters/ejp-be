@@ -1,6 +1,9 @@
 -- CreateEnum
 CREATE TYPE "Role" AS ENUM ('Tutor', 'Student');
 
+-- CreateEnum
+CREATE TYPE "TestcaseType" AS ENUM ('OPENED', 'HIDDEN');
+
 -- CreateTable
 CREATE TABLE "User" (
     "id" SERIAL NOT NULL,
@@ -17,7 +20,6 @@ CREATE TABLE "User" (
 CREATE TABLE "Repo" (
     "id" SERIAL NOT NULL,
     "name" VARCHAR(255) NOT NULL,
-    "url" VARCHAR(255) NOT NULL,
 
     CONSTRAINT "Repo_pkey" PRIMARY KEY ("id")
 );
@@ -47,6 +49,7 @@ CREATE TABLE "Problem" (
     "id" SERIAL NOT NULL,
     "title" VARCHAR(255) NOT NULL,
     "text" TEXT NOT NULL,
+    "uuid" VARCHAR(255) NOT NULL DEFAULT 'null',
     "repoId" INTEGER NOT NULL,
 
     CONSTRAINT "Problem_pkey" PRIMARY KEY ("id")
@@ -57,19 +60,21 @@ CREATE TABLE "TestCase" (
     "id" SERIAL NOT NULL,
     "input" TEXT NOT NULL,
     "output" TEXT NOT NULL,
+    "isHidden" "TestcaseType" NOT NULL,
+    "repoId" INTEGER NOT NULL,
     "problemId" INTEGER NOT NULL,
 
     CONSTRAINT "TestCase_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
-CREATE TABLE "HiddenCase" (
+CREATE TABLE "UserTestCase" (
     "id" SERIAL NOT NULL,
-    "input" TEXT NOT NULL,
-    "output" TEXT NOT NULL,
-    "problemId" INTEGER NOT NULL,
+    "isCorrect" BOOLEAN,
+    "userId" INTEGER NOT NULL,
+    "testCaseId" INTEGER NOT NULL,
 
-    CONSTRAINT "HiddenCase_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "UserTestCase_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateIndex
@@ -77,6 +82,12 @@ CREATE UNIQUE INDEX "User_username_key" ON "User"("username");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "User_nickname_key" ON "User"("nickname");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Repo_name_key" ON "Repo"("name");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "UserRepo_userId_repoId_key" ON "UserRepo"("userId", "repoId");
 
 -- AddForeignKey
 ALTER TABLE "UserRepo" ADD CONSTRAINT "UserRepo_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
@@ -94,7 +105,13 @@ ALTER TABLE "Score" ADD CONSTRAINT "Score_problemId_fkey" FOREIGN KEY ("problemI
 ALTER TABLE "Problem" ADD CONSTRAINT "Problem_repoId_fkey" FOREIGN KEY ("repoId") REFERENCES "Repo"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
+ALTER TABLE "TestCase" ADD CONSTRAINT "TestCase_repoId_fkey" FOREIGN KEY ("repoId") REFERENCES "Repo"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE "TestCase" ADD CONSTRAINT "TestCase_problemId_fkey" FOREIGN KEY ("problemId") REFERENCES "Problem"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "HiddenCase" ADD CONSTRAINT "HiddenCase_problemId_fkey" FOREIGN KEY ("problemId") REFERENCES "Problem"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "UserTestCase" ADD CONSTRAINT "UserTestCase_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "UserTestCase" ADD CONSTRAINT "UserTestCase_testCaseId_fkey" FOREIGN KEY ("testCaseId") REFERENCES "TestCase"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

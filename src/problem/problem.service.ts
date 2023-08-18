@@ -63,6 +63,8 @@ export class ProblemService {
   }
 
   async isMemberOfRepo(userId: number, repoId: number): Promise<boolean> {
+    console.log(userId, repoId)
+
     const userRepo = await this.prisma.userRepo.findFirst({
       where: {
         userId,
