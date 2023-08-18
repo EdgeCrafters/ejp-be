@@ -2,10 +2,13 @@ import {
   Body,
   Controller,
   Get,
+  Param,
+  ParseIntPipe,
   Post,
   Put,
   Req,
   UploadedFile,
+  UseGuards,
   UseInterceptors
 } from '@nestjs/common'
 import { ReposService } from './repos.service'
@@ -20,9 +23,16 @@ import { AuthenticatedRequest } from 'src/common/interface/authenticated-request
 import { Express } from 'express'
 import { FileInterceptor } from '@nestjs/platform-express'
 import { FileDto } from './dtos/file.dto'
+import { RepoGuard } from 'src/problem/guards/repo.guard'
 @Controller('repos')
 export class ReposController {
   constructor(private readonly reposService: ReposService) {}
+
+  @Get(':repoId')
+  @UseGuards(RepoGuard)
+  async getRepoInfos(@Param('repoId', ParseIntPipe) repoId: number) {
+    return await this.reposService.getRepoInfos(repoId)
+  }
 
   @Roles(Role.Tutor)
   @Post()

@@ -18,6 +18,21 @@ export class ReposService {
     private readonly minio: MinioClientService
   ) {}
 
+  async getRepoInfos(repoId: number) {
+    return await this.prismaService.repo.findUnique({
+      where: {
+        id: repoId
+      },
+      include: {
+        Problem: {
+          include: {
+            testCase: true
+          }
+        }
+      }
+    })
+  }
+
   async createNewRepo(createRepoDto: CreateRepoDto) {
     const repoName = createRepoDto.repoName.toLowerCase()
     const repoExist = await this.prismaService.repo.findFirst({
