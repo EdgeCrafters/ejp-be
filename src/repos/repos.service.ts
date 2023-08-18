@@ -125,6 +125,10 @@ export class ReposService {
               Repo: true
             }
           })
+          if (problem.uuid !== null) {
+            await this.minio.removeFile(problem.Repo.name, problem.uuid)
+          }
+
           await this.minio.uploadFile(
             key,
             buffer,
@@ -134,6 +138,7 @@ export class ReposService {
             mimetype,
             problem.Repo.name
           )
+
           return await tx.problem.update({
             where: {
               id: fileDto.problemId
