@@ -10,7 +10,6 @@ import { RolesGuard } from './common/guard/roles.guard'
 import { ReposModule } from './repos/repos.module'
 import { ProblemModule } from './problem/problem.module'
 import { TestcaseModule } from './testcase/testcase.module'
-import { SubmitModule } from './submit/submit.module'
 import { MinioClientModule } from './minio/minio.module'
 
 @Module({
@@ -21,7 +20,6 @@ import { MinioClientModule } from './minio/minio.module'
     PrismaModule,
     ProblemModule,
     TestcaseModule,
-    SubmitModule,
     MinioClientModule
   ],
   controllers: [AppController],

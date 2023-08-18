@@ -2,40 +2,37 @@ import {
   Body,
   Controller,
   Delete,
+  Get,
   Param,
   ParseIntPipe,
-  Patch,
   Post,
+  Put,
+  Req,
   UseGuards
 } from '@nestjs/common'
 import { TestcaseService } from './testcase.service'
 import { Roles } from 'src/common/decorator/roles.decorator'
-import { type HiddenCase, Role, type TestCase } from '@prisma/client'
+import { Role, type TestCase } from '@prisma/client'
 import { TestcaseGuard } from './guards/testcase.guard'
-import {
-  CreateHiddencaseDto,
-  CreateTestcaseDto,
-  UpdateHiddencaseDTO,
-  UpdateTestcaseDTO
-} from './dto/testcase.dto'
-import { HiddencaseGuard } from './guards/hiddencase.guard'
+import { CreateTestcaseDto } from './dto/testcase.dto'
 import { CommonResponseDto } from 'src/common/dtos/common-response.dto'
+import { AuthenticatedRequest } from 'src/common/interface/authenticated-request.interface'
 
-@Roles(Role.Tutor)
 @Controller('testcase')
 export class TestcaseController {
   constructor(private readonly testcaseService: TestcaseService) {}
 
-  @Patch('/testcase/:testcaseId')
+  @Roles(Role.Tutor)
+  @Get(':testcaseId')
   @UseGuards(TestcaseGuard)
-  async updateTestcase(
-    @Body() testcaseDTO: UpdateTestcaseDTO,
+  async getTestcase(
     @Param('testcaseId', ParseIntPipe) testcaseId: number
   ): Promise<TestCase> {
-    return await this.testcaseService.updateTestcase(testcaseId, testcaseDTO)
+    return await this.testcaseService.getTestcase(testcaseId)
   }
 
-  @Delete('/testcase/:testcaseId')
+  @Roles(Role.Tutor)
+  @Delete(':testcaseId')
   @UseGuards(TestcaseGuard)
   async deleteTestcase(
     @Param('testcaseId', ParseIntPipe) testcaseId: number
@@ -43,37 +40,25 @@ export class TestcaseController {
     return await this.testcaseService.deleteTestcase(testcaseId)
   }
 
-  @Patch('/hiddencase/:hiddencaseId')
-  @UseGuards(HiddencaseGuard)
-  async updateHiddencase(
-    @Body() testcaseDTO: UpdateHiddencaseDTO,
-    @Param('hiddencaseId', ParseIntPipe) hiddencaseId: number
-  ): Promise<HiddenCase> {
-    return await this.testcaseService.updateHiddencase(
-      hiddencaseId,
-      testcaseDTO
-    )
-  }
-
-  @Delete('/hiddencase/:hiddencaseId')
-  @UseGuards(HiddencaseGuard)
-  async deleteeHiddencase(
-    @Param('hiddencaseId', ParseIntPipe) hiddencaseId: number
-  ): Promise<HiddenCase> {
-    return await this.testcaseService.deleteHiddencase(hiddencaseId)
-  }
-
   @Roles(Role.Tutor)
-  @Post('/testcase')
+  @Post()
   async createTestCase(@Body() createTestcaseDto: CreateTestcaseDto) {
     await this.testcaseService.createTestcase(createTestcaseDto)
     return new CommonResponseDto()
   }
 
-  @Roles(Role.Tutor)
-  @Post('/hiddencase')
-  async createHiddencase(@Body() createHiddencaseDto: CreateHiddencaseDto) {
-    await this.testcaseService.createHiddencase(createHiddencaseDto)
-    return new CommonResponseDto()
+  @Put(':testcaseId')
+  async updateResult(
+    @Param('testcaseId', ParseIntPipe) testcaseId: number,
+    @Body('hashedOutput') hashedOutput: string,
+    @Req() req: AuthenticatedRequest
+  ) {
+    await this.testcaseService.updateResult(
+      testcaseId,
+      hashedOutput,
+      req.user.userId
+    )
+
+    return { message: 'succeed' }
   }
 }

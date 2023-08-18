@@ -1,21 +1,17 @@
 import { Type } from 'class-transformer'
 import {
+  IsEnum,
   IsInt,
   IsNotEmpty,
-  IsOptional,
   IsPositive,
   IsString
 } from 'class-validator'
 
-export class UpdateTestcaseDTO {
-  @IsString()
-  @IsOptional()
-  url?: string
+export enum TestcaseType {
+  OPENED = 'OPENED',
+  HIDDEN = 'HIDDEN'
 }
-
-export class UpdateHiddencaseDTO extends UpdateTestcaseDTO {}
-
-export class CreateTestcaseDto extends UpdateTestcaseDTO {
+export class TestcaseDto {
   @IsNotEmpty()
   @Type(() => Number)
   @IsInt()
@@ -35,6 +31,9 @@ export class CreateTestcaseDto extends UpdateTestcaseDTO {
   @IsNotEmpty()
   @IsString()
   output: string
-}
 
-export class CreateHiddencaseDto extends CreateTestcaseDto {}
+  @IsNotEmpty()
+  @IsEnum(TestcaseType)
+  isHidden: TestcaseType
+}
+export class CreateTestcaseDto extends TestcaseDto {}
