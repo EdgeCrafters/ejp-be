@@ -91,16 +91,15 @@ export class ReposService {
   }
 
   async createUser(body) {
-    const { role, username, nickname, password, ssh } = body
+    const { role, username, nickname, password } = body
     try {
       await this.prismaService.$transaction(async (tx) => {
         await tx.user.create({
           data: {
-            role: role,
-            username: username,
-            nickname: nickname,
-            password: await argon2.hash(password),
-            sshKey: ssh
+            role,
+            username,
+            nickname,
+            password: await argon2.hash(password)
           }
         })
       })
