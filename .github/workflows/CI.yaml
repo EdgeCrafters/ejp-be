@@ -109,7 +109,8 @@ jobs:
             --from-migrations ./prisma/migrations \
             --to-schema-datamodel ./prisma/schema.prisma \
             --shadow-database-url postgresql://postgres:1234@127.0.0.1:5432/skku-ejs?schema=public \
-            --exit-code
+            --exit-code \
+            && pnpm exec prisma migrate reset -f
 
       - name: Check types in Typescript
         run: pnpm exec tsc --noEmit
