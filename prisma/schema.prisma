@@ -15,6 +15,7 @@ enum Role {
   Student
 }
 
+
 enum TestcaseType {
   OPENED
   HIDDEN
@@ -31,6 +32,7 @@ model User {
   score        Score[]
   UserGroup    UserRepo[]
   UserTestCase UserTestCase[]
+
 }
 
 model Repo {
