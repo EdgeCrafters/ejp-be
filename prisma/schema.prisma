@@ -15,28 +15,31 @@ enum Role {
   Student
 }
 
-model User {
-  id       Int     @id @default(autoincrement())
-  username String  @unique @db.VarChar(255)
-  password String  @db.VarChar(255)
-  nickname String  @unique @db.VarChar(255)
-  role     Role
-  otpKey   Int     @default(0)
-  sshKey   String? @db.Text
+enum TestcaseType {
+  OPENED
+  HIDDEN
+}
 
-  score      Score[]
-  UserGroup  UserRepo[]
-  UserHidden UserHiddenCase[]
+model User {
+  id       Int    @id @default(autoincrement())
+  username String @unique @db.VarChar(255)
+  password String @db.VarChar(255)
+  nickname String @unique @db.VarChar(255)
+  role     Role
+  otpKey   Int    @default(0)
+
+  score        Score[]
+  UserGroup    UserRepo[]
+  UserTestCase UserTestCase[]
 }
 
 model Repo {
   id   Int    @id @default(autoincrement())
   name String @unique @db.VarChar(255)
 
-  Problem    Problem[]
-  UserRepo   UserRepo[]
-  TestCase   TestCase[]
-  HiddenCase HiddenCase[]
+  Problem  Problem[]
+  UserRepo UserRepo[]
+  TestCase TestCase[]
 }
 
 model UserRepo {
@@ -60,47 +63,33 @@ model Score {
 }
 
 model Problem {
-  id         Int          @id @default(autoincrement())
-  title      String       @db.VarChar(255)
-  text       String       @db.Text
-  uuid       String       @default("null") @db.VarChar(255)
-  score      Score[]
-  testCase   TestCase[]
-  hiddenCase HiddenCase[]
-  Repo       Repo         @relation(fields: [repoId], references: [id], onDelete: Cascade)
-  repoId     Int
+  id       Int        @id @default(autoincrement())
+  title    String     @db.VarChar(255)
+  text     String     @db.Text
+  uuid     String     @default("null") @db.VarChar(255)
+  score    Score[]
+  testCase TestCase[]
+  Repo     Repo       @relation(fields: [repoId], references: [id], onDelete: Cascade)
+  repoId   Int
 }
 
 model TestCase {
-  id        Int     @id @default(autoincrement())
-  url       String  @db.VarChar(255)
-  input     String  @db.Text
-  output    String  @db.Text
-  Repo      Repo    @relation(fields: [repoId], references: [id], onDelete: Cascade)
-  repoId    Int
-  Problem   Problem @relation(fields: [problemId], references: [id], onDelete: Cascade)
-  problemId Int
+  id           Int            @id @default(autoincrement())
+  input        String         @db.Text
+  output       String         @db.Text
+  isHidden     TestcaseType
+  Repo         Repo           @relation(fields: [repoId], references: [id], onDelete: Cascade)
+  repoId       Int
+  Problem      Problem        @relation(fields: [problemId], references: [id], onDelete: Cascade)
+  problemId    Int
+  UserTestCase UserTestCase[]
 }
 
-model HiddenCase {
-  id        Int     @id @default(autoincrement())
-  url       String  @db.VarChar(255)
-  input     String  @db.Text
-  output    String  @db.Text
-  Repo      Repo    @relation(fields: [repoId], references: [id])
-  repoId    Int
-  Problem   Problem @relation(fields: [problemId], references: [id], onDelete: Cascade)
-  problemId Int
-
-  userHiddenCase UserHiddenCase[]
-}
-
-model UserHiddenCase {
-  id        Int      @id @default(autoincrement())
-  isCorrect Boolean?
-
-  User         User       @relation(fields: [userId], references: [id])
-  userId       Int
-  HiddenCase   HiddenCase @relation(fields: [hiddenCaseId], references: [id])
-  hiddenCaseId Int
+model UserTestCase {
+  id         Int      @id @default(autoincrement())
+  isCorrect  Boolean?
+  User       User     @relation(fields: [userId], references: [id])
+  userId     Int
+  TestCase   TestCase @relation(fields: [testCaseId], references: [id])
+  testCaseId Int
 }
