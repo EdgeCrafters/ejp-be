@@ -11,6 +11,7 @@ import { ReposModule } from './repos/repos.module'
 import { ProblemModule } from './problem/problem.module'
 import { TestcaseModule } from './testcase/testcase.module'
 import { MinioClientModule } from './minio/minio.module'
+import { SubmitModule } from './submit/submit.module'
 
 @Module({
   imports: [
@@ -20,7 +21,8 @@ import { MinioClientModule } from './minio/minio.module'
     PrismaModule,
     ProblemModule,
     TestcaseModule,
-    MinioClientModule
+    MinioClientModule,
+    SubmitModule
   ],
   controllers: [AppController],
   providers: [

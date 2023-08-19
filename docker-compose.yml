@@ -28,14 +28,14 @@ services:
     network_mode: host
   minio:
     container_name: skku-ejs-dev-minio
-    image: quay.io/minio/minio:RELEASE.2023-08-09T23-30-22Z
+    image: minio/minio
     command: server /workspace/minio --console-address ":9001"
     ports:
       - 9000:9000
       - 9001:9001
     environment:
-      MINIO_ROOT_USER: minioadmin
-      MINIO_ROOT_PASSWORD: minioadmin
+      MINIO_ROOT_USER: skku-ejs
+      MINIO_ROOT_PASSWORD: 1234
     volumes:
       - .:/workspace:cached
     network_mode: host
