@@ -7,10 +7,10 @@ services:
     image: mcr.microsoft.com/vscode/devcontainers/typescript-node:18-bullseye
     ports:
       - 4000:4000
-    expose:
-      - 4000
     volumes:
       - .:/workspace:cached
+    depends_on:
+      - database
     stdin_open: true
     tty: true
     environment:
@@ -25,7 +25,6 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: 1234
       POSTGRES_DB: skku
-    network_mode: host
   minio:
     container_name: skku-ejs-dev-minio
     image: minio/minio
@@ -35,7 +34,6 @@ services:
       - 9001:9001
     environment:
       MINIO_ROOT_USER: skku-ejs
-      MINIO_ROOT_PASSWORD: 1234
+      MINIO_ROOT_PASSWORD: 12345678
     volumes:
       - .:/workspace:cached
-    network_mode: host

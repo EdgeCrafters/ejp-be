@@ -14,13 +14,13 @@ BASEDIR=$(dirname $(dirname $(realpath $0)))
 cd $BASEDIR
 
 # Generate env file
-echo "DATABASE_URL=\"postgresql://postgres:1234@localhost:5432/skku?schema=public\"" > .env
+echo "DATABASE_URL=\"postgresql://postgres:1234@localhost:5434/skku?schema=public\"" > .env
 echo "PORT=4000" >> .env
 echo "SESSION_SECRET=ASD3FCV3XDSI5MVQWR643LKW23EQFLM" >> .env
 echo "MINIO_PORT=9000" >> .env
-echo "MINIO_END_POINT=localhost" >> .env
-echo "MINIO_ACCESS_KEY=minioadmin" >> .env
-echo "MINIO_SECRET_KEY=minioadmin" >> .env
+echo "MINIO_END_POINT=skku-ejs-dev-minio" >> .env
+echo "MINIO_ACCESS_KEY=skku-ejs" >> .env
+echo "MINIO_SECRET_KEY=12345678" >> .env
 # Install pnpm and Node.js packages
 npm install -g pnpm@latest
 pnpm install
