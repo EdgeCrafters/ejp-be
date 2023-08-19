@@ -3,6 +3,7 @@ node_modules
 dist
 thunder-tests
 resources
+minio
 
 # ejs-t
 C/ejs-t/build/*
