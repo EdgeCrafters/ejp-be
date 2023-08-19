@@ -10,7 +10,7 @@ services:
     volumes:
       - .:/workspace:cached
     depends_on:
-      - database
+      - dev-db
     stdin_open: true
     tty: true
     environment:
