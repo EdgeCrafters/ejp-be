@@ -43,26 +43,19 @@ export class ReposService {
       throw new BadRequestException('이미 존재하는 repo입니다')
     }
     try {
-      const newRepo = await this.prismaService.$transaction(async (tx) => {
-        //minio에서 버킷(레포) 생성
-        await this.minio.listBucket()
-        await this.minio.makeBucket(repoName)
-        return await tx.repo.create({
-          data: {
-            name: repoName,
-            UserRepo: {
-              create: {
-                userId: userId
-              }
+      const newRepo = await this.prismaService.repo.create({
+        data: {
+          name: repoName,
+          UserRepo: {
+            create: {
+              userId: userId
             }
           }
-        })
+        }
       })
       return newRepo
     } catch (error) {
-      throw new BadRequestException(
-        'bucket name is not valid\n bucket names should not contain undersocre or dash.\n Valid examples are [my-eu-bucket-3], [my-project-x],[4my-group]'
-      )
+      throw new BadRequestException('repo creation failed')
     }
   }
 
@@ -141,7 +134,6 @@ export class ReposService {
         async (tx) => {
           const { originalname, mimetype, size, buffer } = uploadedFile
           const createdAt = new Date()
-          const key = v1()
           const problem = await this.prismaService.problem.findFirst({
             where: {
               id: problemId
@@ -153,15 +145,14 @@ export class ReposService {
           if (problem.uuid !== null) {
             await this.minio.removeFile(problem.Repo.name, problem.uuid)
           }
-
+          const key = `${problem.Repo.name}-${problem.title}`
           await this.minio.uploadFile(
             key,
             buffer,
             size,
             createdAt,
             Buffer.from(originalname, 'latin1').toString('utf8'),
-            mimetype,
-            problem.Repo.name
+            mimetype
           )
 
           return await tx.problem.update({

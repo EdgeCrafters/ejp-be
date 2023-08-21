@@ -41,8 +41,7 @@ export class MinioClientService {
     size: number,
     createdAt: Date,
     originalName: string,
-    mimeType: string,
-    bucketName: string
+    mimeType: string
   ) {
     const metaData = {
       'Content-Type': mimeType,
@@ -51,7 +50,7 @@ export class MinioClientService {
     }
 
     try {
-      await this.minioClient.putObject(bucketName, key, file, size, metaData)
+      await this.minioClient.putObject(this.bucket, key, file, size, metaData)
     } catch (err) {
       throw new BadRequestException(err.message)
     }
@@ -59,7 +58,7 @@ export class MinioClientService {
 
   async removeFile(bucketName: string, key: string) {
     try {
-      return await this.minioClient.removeObject(bucketName, key)
+      return await this.minioClient.removeObject(this.bucket, key)
     } catch (err) {
       throw new BadRequestException(err.message)
     }
