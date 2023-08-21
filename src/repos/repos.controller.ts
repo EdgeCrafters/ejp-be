@@ -22,8 +22,8 @@ import { Content } from 'src/common/dtos/content-wrapper.dto'
 import { AuthenticatedRequest } from 'src/common/interface/authenticated-request.interface'
 import { Express } from 'express'
 import { FileInterceptor } from '@nestjs/platform-express'
-import { FileDto } from './dtos/file.dto'
 import { RepoGuard } from 'src/problem/guards/repo.guard'
+import { ProblemGuard } from 'src/problem/guards/problem.guard'
 @Controller('repos')
 export class ReposController {
   constructor(private readonly reposService: ReposService) {}
@@ -66,13 +66,14 @@ export class ReposController {
   }
 
   @Roles(Role.Tutor)
-  @Post('/files')
+  @UseGuards(ProblemGuard)
+  @Post('/files/:problemId')
   @UseInterceptors(FileInterceptor('file'))
   async createFile(
     @UploadedFile() uploadedFile: Express.Multer.File,
-    @Body() fileDto: FileDto
+    @Param('problemId', ParseIntPipe) problemId: number
   ) {
-    await this.reposService.createFile(uploadedFile, fileDto)
+    await this.reposService.createFile(uploadedFile, problemId)
     return new CommonResponseDto()
   }
 }

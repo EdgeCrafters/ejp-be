@@ -10,7 +10,6 @@ import type { CreateRepoDto } from './dtos/createRepo.dto'
 import type { AddUserToRepoDto } from './dtos/addUserToRepo.dto'
 import { MinioClientService } from 'src/minio/minio.service'
 import { v1 } from 'uuid'
-import type { FileDto } from './dtos/file.dto'
 @Injectable()
 export class ReposService {
   constructor(
@@ -43,11 +42,8 @@ export class ReposService {
     if (repoExist) {
       throw new BadRequestException('이미 존재하는 repo입니다')
     }
-    const newRepo = await this.prismaService.$transaction(async (tx) => {
-      //minio에서 버킷(레포) 생성
-      await this.minio.listBucket()
-      await this.minio.makeBucket(repoName)
-      return await tx.repo.create({
+    try {
+      const newRepo = await this.prismaService.repo.create({
         data: {
           name: repoName,
           UserRepo: {
@@ -57,8 +53,10 @@ export class ReposService {
           }
         }
       })
-    })
-    return newRepo
+      return newRepo
+    } catch (error) {
+      throw new BadRequestException('repo creation failed')
+    }
   }
 
   async addUserToRepo(addUserToRepoDto: AddUserToRepoDto) {
@@ -130,16 +128,15 @@ export class ReposService {
     return
   }
 
-  async createFile(uploadedFile: Express.Multer.File, fileDto: FileDto) {
+  async createFile(uploadedFile: Express.Multer.File, problemId: number) {
     try {
       return await this.prismaService.$transaction(
         async (tx) => {
           const { originalname, mimetype, size, buffer } = uploadedFile
           const createdAt = new Date()
-          const key = v1()
           const problem = await this.prismaService.problem.findFirst({
             where: {
-              id: fileDto.problemId
+              id: problemId
             },
             include: {
               Repo: true
@@ -148,20 +145,19 @@ export class ReposService {
           if (problem.uuid !== null) {
             await this.minio.removeFile(problem.Repo.name, problem.uuid)
           }
-
+          const key = `${problem.Repo.name}-${problem.title}`
           await this.minio.uploadFile(
             key,
             buffer,
             size,
             createdAt,
             Buffer.from(originalname, 'latin1').toString('utf8'),
-            mimetype,
-            problem.Repo.name
+            mimetype
           )
 
           return await tx.problem.update({
             where: {
-              id: fileDto.problemId
+              id: problemId
             },
             data: {
               uuid: key

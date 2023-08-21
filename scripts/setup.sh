@@ -21,6 +21,9 @@ echo "MINIO_PORT=9000" >> .env
 echo "MINIO_END_POINT=skku-ejs-dev-minio" >> .env
 echo "MINIO_ACCESS_KEY=minioadmin" >> .env
 echo "MINIO_SECRET_KEY=minioadmin" >> .env
+echo "MINIO_BUCKET_NAME=test" >> .env
+
+
 # Install pnpm and Node.js packages
 npm install -g pnpm@latest
 pnpm install
