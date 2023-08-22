@@ -25,7 +25,6 @@ model User {
   id       Int    @id @default(autoincrement())
   username String @unique @db.VarChar(255)
   password String @db.VarChar(255)
-  nickname String @unique @db.VarChar(255)
   role     Role
   otpKey   Int    @default(0)
 
