@@ -16,11 +16,15 @@ export class TestcaseService {
   ) {}
 
   async deleteTestcase(id: number): Promise<TestCase> {
-    return await this.prisma.testCase.delete({
-      where: {
-        id
-      }
-    })
+    try {
+      return await this.prisma.testCase.delete({
+        where: {
+          id
+        }
+      })
+    } catch (error) {
+      throw new BadRequestException('testcaseId is not valid')
+    }
   }
 
   async getTestcase(testcaseId: number): Promise<TestCase> {
@@ -56,12 +60,16 @@ export class TestcaseService {
   }
 
   async createTestcase(createTestcaseDto: CreateTestcaseDto) {
-    await this.prisma.testCase.create({
-      data: {
-        ...createTestcaseDto
-      }
-    })
-    return
+    try {
+      await this.prisma.testCase.create({
+        data: {
+          ...createTestcaseDto
+        }
+      })
+      return
+    } catch (error) {
+      throw new BadRequestException('creating new testcase failed')
+    }
   }
 
   async updateResult(

@@ -7,31 +7,26 @@ async function seed() {
   const users: Prisma.UserCreateManyInput[] = [
     {
       username: 'tutor01',
-      nickname: 'tutor01',
       password: await hash('1234'),
       role: Role.Tutor
     },
     {
       username: 'tutor02',
-      nickname: 'tutor02',
       password: await hash('1234'),
       role: Role.Tutor
     },
     {
       username: 'student01',
-      nickname: 'student01',
       password: await hash('1234'),
       role: Role.Student
     },
     {
       username: 'student02',
-      nickname: 'student02',
       password: await hash('1234'),
       role: Role.Student
     },
     {
       username: 'student03',
-      nickname: 'student03',
       password: await hash('1234'),
       role: Role.Student
     }
