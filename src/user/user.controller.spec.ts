@@ -1,5 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing'
 import { UserController } from './user.controller'
+import { expect } from 'chai'
 
 describe('UserController', () => {
   let controller: UserController
@@ -13,6 +14,6 @@ describe('UserController', () => {
   })
 
   it('should be defined', () => {
-    expect(controller).toBeDefined()
+    expect(controller).to.be.ok
   })
 })
