@@ -12,7 +12,7 @@ async function bootstrap() {
   const configService = app.get(ConfigService)
 
   app.set('trust proxy', 1)
-  app.useGlobalPipes(new ValidationPipe({ whitelist: true }))
+  app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true }))
   app.use(cookieParser())
   app.use(
     session({
