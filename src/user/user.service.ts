@@ -10,6 +10,8 @@ import * as argon2 from 'argon2'
 import type { AuthenticatedRequest } from 'src/common/interface/authenticated-request.interface'
 import type { ModifyUserDto } from './dto/modify-user.dto'
 import { Role } from '@prisma/client'
+import type { EnrollUserToRepoDto } from './dto/enroll-user-repo.dto'
+import { EnrollUserToRepo } from './dto/enroll-user-repo.dto'
 @Injectable()
 export class UserService {
   constructor(private readonly prismaService: PrismaService) {}
@@ -23,7 +25,7 @@ export class UserService {
     const addUserObject = await this.arrayToObject(addUserdto)
     try {
       await this.prismaService.user.createMany({
-        data: addUserObject as any
+        data: addUserObject
       })
     } catch (e) {
       throw new BadRequestException('이미 존재하는 사용자입니다')
@@ -31,7 +33,7 @@ export class UserService {
     return
   }
 
-  async arrayToObject(addUserdto: AddUserDto): Promise<AddUser[]> {
+  async arrayToObject(addUserdto: AddUserDto) {
     const returnObject = []
     for (let idx = 0; idx < addUserdto.password.length; idx++) {
       returnObject.push(
@@ -83,5 +85,56 @@ export class UserService {
       }
     }
     return
+  }
+
+  async enrollUserToRepo(enrollUserToRepoDto: EnrollUserToRepoDto) {
+    if (
+      enrollUserToRepoDto.repoId.length !== enrollUserToRepoDto.username.length
+    ) {
+      throw new BadRequestException(
+        'length of username and repo does not match'
+      )
+    }
+    // const userIds = await this.prismaService.user.findMany({
+    //   where: {
+    //     username: {
+    //       in: enrollUserToRepoDto.username
+    //     }
+    //   }
+    // })
+    const addUserRepoObject = await this.addUserRepoDtoToObject(
+      enrollUserToRepoDto
+    )
+    console.log(addUserRepoObject)
+    try {
+      await this.prismaService.userRepo.createMany({
+        data: addUserRepoObject
+      })
+    } catch (error) {
+      throw new BadRequestException('current userRepo alreay exists')
+    }
+  }
+
+  async addUserRepoDtoToObject(enrollUserToRepoDto: EnrollUserToRepoDto) {
+    const returnObject = []
+    for (let idx = 0; idx < enrollUserToRepoDto.username.length; idx++) {
+      let userId
+      try {
+        userId = await this.prismaService.user.findUnique({
+          where: {
+            username: enrollUserToRepoDto.username[idx]
+          },
+          select: {
+            id: true
+          }
+        })
+      } catch (error) {
+        throw new BadRequestException('username does not exists')
+      }
+      returnObject.push(
+        new EnrollUserToRepo(userId.id, enrollUserToRepoDto.repoId[idx])
+      )
+    }
+    return returnObject
   }
 }

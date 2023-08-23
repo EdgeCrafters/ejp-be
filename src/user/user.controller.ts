@@ -7,6 +7,7 @@ import { ModifyUserDto } from './dto/modify-user.dto'
 import { Role } from '@prisma/client'
 import { AuthenticatedGuard } from 'src/auth/guard/authenticated.guard'
 import { CommonResponseDto } from 'src/common/dtos/common-response.dto'
+import { EnrollUserToRepoDto } from './dto/enroll-user-repo.dto'
 
 @Controller('user')
 export class UserController {
@@ -26,5 +27,10 @@ export class UserController {
   ) {
     await this.userService.modifyUser(req, modifyUserDto)
     return new CommonResponseDto()
+  }
+  @Roles(Role.Tutor)
+  @Post('enroll')
+  async enrollUserToRepo(@Body() enrollUserToRepoDto: EnrollUserToRepoDto) {
+    await this.userService.enrollUserToRepo(enrollUserToRepoDto)
   }
 }
