@@ -1,12 +1,14 @@
-import { IsArray, IsNotEmpty } from 'class-validator'
+import { ArrayMinSize, IsArray, IsString } from 'class-validator'
 
 export class AddUserDto {
-  @IsNotEmpty()
   @IsArray()
+  @IsString({ each: true })
+  @ArrayMinSize(1)
   username: string[]
 
-  @IsNotEmpty()
   @IsArray()
+  @IsString({ each: true })
+  @ArrayMinSize(1)
   password: string[]
 }
 
