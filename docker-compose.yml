@@ -16,6 +16,7 @@ services:
     environment:
       DEVCONTAINER: 1
     network_mode: host
+
   dev-db:
     container_name: skku-ejs-dev-db
     image: postgres:14-alpine
@@ -25,6 +26,7 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: 1234
       POSTGRES_DB: skku
+
   minio:
     container_name: skku-ejs-dev-minio
     image: minio/minio
@@ -37,19 +39,14 @@ services:
       MINIO_ROOT_PASSWORD: 12345678
     volumes:
       - .:/workspace:cached
-    networks:
-      - mynetwork
+
   mcservice:
     container_name: skku-ejs-dev-minio-mc
     image: minio/mc
     restart: on-failure
     entrypoint: >
       /bin/sh -c "
-      /usr/bin/mc alias set myminio http://skku-ejs-dev-minio:9000 minioadmin minioadmin;
+      /usr/bin/mc alias set myminio http://skku-ejs-dev-minio:9000 skku-ejs 12345678;
       /usr/bin/mc mb myminio/test;
       /usr/bin/mc policy set public myminio/test;
       "
-    networks:
-      - mynetwork
-networks:
-  mynetwork:
