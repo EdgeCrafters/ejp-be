@@ -4,12 +4,10 @@ import {
   InternalServerErrorException
 } from '@nestjs/common'
 import { PrismaService } from '../prisma/prisma.service'
-import * as argon2 from 'argon2'
 import { Role } from '@prisma/client'
 import type { CreateRepoDto } from './dtos/createRepo.dto'
 import type { AddUserToRepoDto } from './dtos/addUserToRepo.dto'
 import { MinioClientService } from 'src/minio/minio.service'
-import { v1 } from 'uuid'
 @Injectable()
 export class ReposService {
   constructor(
@@ -106,26 +104,6 @@ export class ReposService {
         }
       })
     }
-  }
-
-  async createUser(body) {
-    const { role, username, nickname, password } = body
-    try {
-      await this.prismaService.$transaction(async (tx) => {
-        await tx.user.create({
-          data: {
-            role,
-            username,
-            nickname,
-            password: await argon2.hash(password)
-          }
-        })
-      })
-    } catch (e) {
-      throw new BadRequestException('이미 존재하는 사용자입니다')
-    }
-
-    return
   }
 
   async createFile(uploadedFile: Express.Multer.File, problemId: number) {
