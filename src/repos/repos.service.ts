@@ -79,7 +79,6 @@ export class ReposService {
         })
       })
     } catch (e) {
-      console.log({ e })
       throw new InternalServerErrorException(e)
     }
     return 'success'
@@ -121,7 +120,7 @@ export class ReposService {
             }
           })
           if (problem.uuid !== null) {
-            await this.minio.removeFile(problem.Repo.name, problem.uuid)
+            await this.minio.removeFile(problem.uuid)
           }
           const key = `${problem.Repo.name}-${problem.title}`
           await this.minio.uploadFile(
@@ -152,6 +151,42 @@ export class ReposService {
       throw new InternalServerErrorException(
         '파일 업로드에 문제가 발생하였습니다'
       )
+    }
+  }
+
+  async deleteFile(problemId: number) {
+    try {
+      const key = await this.prismaService.problem.findFirst({
+        where: {
+          id: problemId
+        },
+        select: {
+          uuid: true
+        }
+      })
+      await this.minio.removeFile(key.uuid)
+      return
+    } catch (error) {
+      throw new InternalServerErrorException(error)
+    }
+  }
+
+  async getFile(problemId: number) {
+    try {
+      const [fileName, stream] = await this.prismaService.$transaction(
+        async (tx) => {
+          const file = await tx.problem.findFirst({
+            where: {
+              id: problemId
+            }
+          })
+          const stream = await this.minio.getFile(file.uuid)
+          return [file.uuid, stream]
+        }
+      )
+      return { fileName, stream }
+    } catch (error) {
+      throw new InternalServerErrorException('file search failed')
     }
   }
 }

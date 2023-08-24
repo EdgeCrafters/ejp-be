@@ -1,12 +1,14 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   ParseIntPipe,
   Post,
   Put,
   Req,
+  Response,
   UploadedFile,
   UseGuards,
   UseInterceptors
@@ -24,6 +26,7 @@ import { Express } from 'express'
 import { FileInterceptor } from '@nestjs/platform-express'
 import { RepoGuard } from 'src/problem/guards/repo.guard'
 import { ProblemGuard } from 'src/problem/guards/problem.guard'
+import { Public } from 'src/common/decorator/public.decorator'
 @Controller('repos')
 export class ReposController {
   constructor(private readonly reposService: ReposService) {}
@@ -75,5 +78,24 @@ export class ReposController {
   ) {
     await this.reposService.createFile(uploadedFile, problemId)
     return new CommonResponseDto()
+  }
+
+  @Roles(Role.Tutor)
+  @UseGuards(ProblemGuard)
+  @Delete('/files/:problemId')
+  async deleteFile(@Param('problemId', ParseIntPipe) problemId: number) {
+    await this.reposService.deleteFile(problemId)
+    return new CommonResponseDto()
+  }
+
+  @UseGuards(ProblemGuard)
+  @Public()
+  @Get('/files/:problemId')
+  async getFile(
+    @Param('problemId', ParseIntPipe) problemId: number,
+    @Response() res
+  ) {
+    const { fileName, stream } = await this.reposService.getFile(problemId)
+    stream.pipe(res)
   }
 }

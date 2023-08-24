@@ -56,7 +56,7 @@ export class MinioClientService {
     }
   }
 
-  async removeFile(bucketName: string, key: string) {
+  async removeFile(key: string) {
     try {
       return await this.minioClient.removeObject(this.bucket, key)
     } catch (err) {
