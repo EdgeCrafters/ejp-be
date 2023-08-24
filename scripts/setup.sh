@@ -14,13 +14,13 @@ BASEDIR=$(dirname $(dirname $(realpath $0)))
 cd $BASEDIR
 
 # Generate env file
-echo "DATABASE_URL=\"postgresql://postgres:1234@skku-ejs-dev-db:5432/skku?schema=public\"" > .env
+echo "DATABASE_URL=\"postgresql://postgres:1234@127.0.0.1:5434/skku?schema=public\"" > .env
 echo "PORT=4000" >> .env
 echo "SESSION_SECRET=ASD3FCV3XDSI5MVQWR643LKW23EQFLM" >> .env
 echo "MINIO_PORT=9000" >> .env
-echo "MINIO_END_POINT=skku-ejs-dev-minio" >> .env
-echo "MINIO_ACCESS_KEY=minioadmin" >> .env
-echo "MINIO_SECRET_KEY=minioadmin" >> .env
+echo "MINIO_END_POINT=127.0.0.1" >> .env
+echo "MINIO_ACCESS_KEY=skku-ejs" >> .env
+echo "MINIO_SECRET_KEY=12345678" >> .env
 echo "MINIO_BUCKET_NAME=test" >> .env
 
 

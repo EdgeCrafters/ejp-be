@@ -7,16 +7,16 @@ services:
     image: mcr.microsoft.com/vscode/devcontainers/typescript-node:18-bullseye
     ports:
       - 4000:4000
-    expose:
-      - 4000
     volumes:
       - .:/workspace:cached
+    depends_on:
+      - dev-db
     stdin_open: true
     tty: true
     environment:
       DEVCONTAINER: 1
-    networks:
-      - mynetwork
+    network_mode: host
+
   dev-db:
     container_name: skku-ejs-dev-db
     image: postgres:14-alpine
@@ -26,33 +26,27 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: 1234
       POSTGRES_DB: skku
-    networks:
-      - mynetwork
+
   minio:
     container_name: skku-ejs-dev-minio
-    image: quay.io/minio/minio:RELEASE.2023-08-09T23-30-22Z
+    image: minio/minio
     command: server /workspace/minio --console-address ":9001"
     ports:
       - 9000:9000
       - 9001:9001
     environment:
-      MINIO_ROOT_USER: minioadmin
-      MINIO_ROOT_PASSWORD: minioadmin
+      MINIO_ROOT_USER: skku-ejs
+      MINIO_ROOT_PASSWORD: 12345678
     volumes:
       - .:/workspace:cached
-    networks:
-      - mynetwork
+
   mcservice:
     container_name: skku-ejs-dev-minio-mc
     image: minio/mc
     restart: on-failure
     entrypoint: >
       /bin/sh -c "
-      /usr/bin/mc alias set myminio http://skku-ejs-dev-minio:9000 minioadmin minioadmin;
+      /usr/bin/mc alias set myminio http://skku-ejs-dev-minio:9000 skku-ejs 12345678;
       /usr/bin/mc mb myminio/test;
       /usr/bin/mc policy set public myminio/test;
       "
-    networks:
-      - mynetwork
-networks:
-  mynetwork:

@@ -12,6 +12,7 @@ import { ProblemModule } from './problem/problem.module'
 import { TestcaseModule } from './testcase/testcase.module'
 import { MinioClientModule } from './minio/minio.module'
 import { UserModule } from './user/user.module'
+import { SubmitModule } from './submit/submit.module'
 
 @Module({
   imports: [
@@ -22,7 +23,8 @@ import { UserModule } from './user/user.module'
     ProblemModule,
     TestcaseModule,
     MinioClientModule,
-    UserModule
+    UserModule,
+    SubmitModule
   ],
   controllers: [AppController],
   providers: [
