@@ -20,14 +20,56 @@ export class ReposService {
       where: {
         id: repoId
       },
-      include: {
+      select: {
+        id: true,
+        name: true,
         Problem: {
-          include: {
-            testCase: true
+          select: {
+            id: true,
+            title: true,
+            text: true,
+            testCase: {
+              select: {
+                id: true,
+                input: true,
+                isHidden: true
+              }
+            }
           }
         }
       }
     })
+  }
+
+  async deleteRepo(repoId: number) {
+    try {
+      await this.prismaService.$transaction(async (tx) => {
+        const repo = await tx.repo.findUniqueOrThrow({
+          where: {
+            id: repoId
+          },
+          select: {
+            Problem: {
+              select: {
+                id: true
+              }
+            }
+          }
+        })
+
+        await Promise.all(
+          repo.Problem.map((value) => {
+            console.log(value)
+            this.deleteFile(value.id)
+          })
+        )
+      })
+      return await this.prismaService.repo.delete({
+        where: { id: repoId }
+      })
+    } catch (e) {
+      throw new InternalServerErrorException(e)
+    }
   }
 
   async createNewRepo(createRepoDto: CreateRepoDto, userId: number) {
@@ -164,6 +206,7 @@ export class ReposService {
           uuid: true
         }
       })
+      console.log(key)
       await this.minio.removeFile(key.uuid)
       return
     } catch (error) {

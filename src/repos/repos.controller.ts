@@ -38,6 +38,12 @@ export class ReposController {
   }
 
   @Roles(Role.Tutor)
+  @Delete(':repoId')
+  async deleteRepo(@Param('repoId', ParseIntPipe) repoId: number) {
+    return await this.reposService.deleteRepo(repoId)
+  }
+
+  @Roles(Role.Tutor)
   @Post()
   async createRepo(
     @Body() createRepoDto: CreateRepoDto,
