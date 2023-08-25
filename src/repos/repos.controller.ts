@@ -19,7 +19,7 @@ import { Role } from '@prisma/client'
 import { CreateRepoDto } from './dtos/createRepo.dto'
 import { CommonResponseDto } from 'src/common/dtos/common-response.dto'
 import { AddUserToRepoDto } from './dtos/addUserToRepo.dto'
-import { RepoDto } from './dtos/repo.dto'
+import { RepoDto, RepoInfoDto } from './dtos/repo.dto'
 import { Content } from 'src/common/dtos/content-wrapper.dto'
 import { AuthenticatedRequest } from 'src/common/interface/authenticated-request.interface'
 import { Express } from 'express'
@@ -34,7 +34,8 @@ export class ReposController {
   @Get(':repoId')
   @UseGuards(RepoGuard)
   async getRepoInfos(@Param('repoId', ParseIntPipe) repoId: number) {
-    return await this.reposService.getRepoInfos(repoId)
+    const repoInfo = await this.reposService.getRepoInfos(repoId)
+    return new RepoInfoDto(repoInfo)
   }
 
   @Roles(Role.Tutor)
