@@ -12,7 +12,7 @@ export class ProblemService {
     private readonly repos: ReposService
   ) {}
 
-  async getProblem(id: number): Promise<Partial<Problem>> {
+  async getProblem(id: number): Promise<Problem> {
     return await this.prisma.problem.findUniqueOrThrow({
       where: {
         id
