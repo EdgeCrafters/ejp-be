@@ -1,12 +1,16 @@
-import { Injectable } from '@nestjs/common'
+import { Injectable, InternalServerErrorException } from '@nestjs/common'
 import { PrismaService } from 'src/prisma/prisma.service'
 import type { CreateProblemDTO } from './dto/createProblem.dto'
 import type { Problem } from '@prisma/client'
 import type { UpdateProblemDTO } from './dto/updateProblem.dto'
+import { ReposService } from 'src/repos/repos.service'
 
 @Injectable()
 export class ProblemService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly repos: ReposService
+  ) {}
 
   async getProblem(id: number): Promise<Problem> {
     return await this.prisma.problem.findUniqueOrThrow({
@@ -55,6 +59,12 @@ export class ProblemService {
   }
 
   async deleteProblem(id: number): Promise<Problem> {
+    try {
+      await this.repos.deleteFile(id)
+    } catch (e) {
+      throw new InternalServerErrorException(e)
+    }
+
     return await this.prisma.problem.delete({
       where: {
         id
