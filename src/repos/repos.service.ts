@@ -20,21 +20,10 @@ export class ReposService {
       where: {
         id: repoId
       },
-      select: {
-        id: true,
-        name: true,
+      include: {
         Problem: {
-          select: {
-            id: true,
-            title: true,
-            text: true,
-            testCase: {
-              select: {
-                id: true,
-                input: true,
-                isHidden: true
-              }
-            }
+          include: {
+            testCase: true
           }
         }
       }
