@@ -34,6 +34,7 @@
     "minio": "^7.1.1",
     "nestjs-minio": "^2.5.0",
     "nestjs-minio-client": "^2.1.0",
+    "papaparse": "^5.4.1",
     "passport": "^0.6.0",
     "passport-local": "^1.0.0",
     "reflect-metadata": "^0.1.13",

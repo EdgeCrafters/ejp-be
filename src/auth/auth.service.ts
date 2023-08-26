@@ -14,14 +14,15 @@ export class AuthService {
   async validateUser(
     username: string,
     password: string
-  ): Promise<{ userId: number }> {
+  ): Promise<{ userId: number; username: string }> {
     const user = await this.prisma.user.findUnique({
       where: {
         username
       },
       select: {
         id: true,
-        password: true
+        password: true,
+        username: true
       }
     })
 
@@ -36,7 +37,8 @@ export class AuthService {
     }
 
     return {
-      userId: user.id
+      userId: user.id,
+      username: user.username
     }
   }
 
@@ -57,11 +59,14 @@ export class AuthService {
     return user.role === Role.Tutor
   }
 
-  async deSerializeUser(userId: number): Promise<{ userId: number }> {
+  async deSerializeUser(
+    userId: number
+  ): Promise<{ userId: number; username: string }> {
     const user = await this.prisma.user.findUnique({
       where: { id: userId },
       select: {
-        id: true
+        id: true,
+        username: true
       }
     })
 
@@ -70,7 +75,8 @@ export class AuthService {
     }
 
     return {
-      userId: user.id
+      userId: user.id,
+      username: user.username
     }
   }
 

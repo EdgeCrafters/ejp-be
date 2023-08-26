@@ -1,8 +1,9 @@
 import { Controller, Get, Param, ParseIntPipe, Req } from '@nestjs/common'
 import { SubmitService } from './submit.service'
 import { Roles } from 'src/common/decorator/roles.decorator'
-import { Role, type Score } from '@prisma/client'
+import { Role } from '@prisma/client'
 import { AuthenticatedRequest } from 'src/common/interface/authenticated-request.interface'
+import type { ScoreCSVDTO, ScoreDTO } from './dto/score.dto'
 
 @Controller('submit')
 export class SubmitController {
@@ -12,26 +13,27 @@ export class SubmitController {
   async getMyScore(
     @Param('problemId', ParseIntPipe) problemId: number,
     @Req() req: AuthenticatedRequest
-  ): Promise<Score> {
-    return await this.submitService.getScore(req.user.userId, problemId)
+  ): Promise<ScoreDTO> {
+    return await this.submitService.getScore(req.user.username, problemId)
   }
 
-  @Get('result/userId/:userId/problemId/:problemId')
+  @Get('result/username/:username/problemId/:problemId')
   @Roles(Role.Tutor)
   async getStudentScore(
-    @Param('userId', ParseIntPipe) userId: number,
+    @Param('username') username: string,
     @Param('problemId', ParseIntPipe) problemId: number
-  ): Promise<Score> {
-    return await this.submitService.getScore(userId, problemId)
+  ): Promise<ScoreDTO> {
+    console.log(username, problemId)
+    return await this.submitService.getScore(username, problemId)
   }
 
-  @Get('result/all/userId/:userId/reopId/:reopId')
+  @Get('result/all/username/:username/reopId/:reopId')
   @Roles(Role.Tutor)
   async getStudentScores(
-    @Param('userId', ParseIntPipe) userId: number,
+    @Param('username') username: string,
     @Param('reopId', ParseIntPipe) reopId: number
-  ): Promise<Score[]> {
-    return await this.submitService.getRepoScores(userId, reopId)
+  ): Promise<ScoreDTO[]> {
+    return await this.submitService.getRepoScores(username, reopId)
   }
 
   @Get('result/all/problemId/:problemId/reopId/:reopId')
@@ -39,7 +41,7 @@ export class SubmitController {
   async getRepoProblemScores(
     @Param('problemId', ParseIntPipe) problemId: number,
     @Param('reopId', ParseIntPipe) repoId: number
-  ): Promise<Score[]> {
+  ): Promise<ScoreCSVDTO> {
     return await this.submitService.getRepoProblemScores(problemId, repoId)
   }
 }

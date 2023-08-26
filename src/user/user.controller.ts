@@ -15,6 +15,7 @@ export class UserController {
   @Roles(Role.Tutor)
   @Post()
   async createUser(@Body() addUserdto: AddUserDto) {
+    console.log(addUserdto)
     await this.userService.createUser(addUserdto)
     return { msg: 'success' }
   }
