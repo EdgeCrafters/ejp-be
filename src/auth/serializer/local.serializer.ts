@@ -15,7 +15,9 @@ export class LocalSerializer extends PassportSerializer {
   async deserializeUser(userId: number, done: CallableFunction) {
     return await this.authService
       .deSerializeUser(userId)
-      .then((user) => done(null, new AuthenticatedUser(user.userId)))
+      .then((user) =>
+        done(null, new AuthenticatedUser(user.userId, user.username))
+      )
       .catch((error) => done(error))
   }
 }

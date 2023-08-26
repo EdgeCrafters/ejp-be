@@ -15,7 +15,6 @@ enum Role {
   Student
 }
 
-
 enum TestcaseType {
   OPENED
   HIDDEN
@@ -31,16 +30,16 @@ model User {
   score        Score[]
   UserGroup    UserRepo[]
   UserTestCase UserTestCase[]
-
 }
 
 model Repo {
   id   Int    @id @default(autoincrement())
   name String @unique @db.VarChar(255)
 
-  Problem  Problem[]
-  UserRepo UserRepo[]
-  TestCase TestCase[]
+  Problem      Problem[]
+  UserRepo     UserRepo[]
+  TestCase     TestCase[]
+  UserTestCase UserTestCase[]
 }
 
 model UserRepo {
@@ -64,14 +63,15 @@ model Score {
 }
 
 model Problem {
-  id       Int        @id @default(autoincrement())
-  title    String     @db.VarChar(255)
-  text     String     @db.Text
-  uuid     String     @default("null") @db.VarChar(255)
-  score    Score[]
-  testCase TestCase[]
-  Repo     Repo       @relation(fields: [repoId], references: [id], onDelete: Cascade)
-  repoId   Int
+  id           Int            @id @default(autoincrement())
+  title        String         @db.VarChar(255)
+  text         String         @db.Text
+  uuid         String         @default("null") @db.VarChar(255)
+  score        Score[]
+  testCase     TestCase[]
+  Repo         Repo           @relation(fields: [repoId], references: [id], onDelete: Cascade)
+  repoId       Int
+  UserTestCase UserTestCase[]
 }
 
 model TestCase {
@@ -93,4 +93,8 @@ model UserTestCase {
   userId     Int
   TestCase   TestCase @relation(fields: [testCaseId], references: [id])
   testCaseId Int
+  Problem    Problem? @relation(fields: [problemId], references: [id])
+  problemId  Int?
+  Repo       Repo?    @relation(fields: [repoId], references: [id])
+  repoId     Int?
 }

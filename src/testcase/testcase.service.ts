@@ -111,7 +111,9 @@ export class TestcaseService {
             data: {
               userId: user.id,
               testCaseId: testcase.id,
-              isCorrect: testcase.output === hashedOutput ? true : false
+              isCorrect: testcase.output === hashedOutput ? true : false,
+              repoId: testcase.repoId,
+              problemId: testcase.problemId
             }
           })
         }
