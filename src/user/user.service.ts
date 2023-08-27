@@ -52,7 +52,6 @@ export class UserService {
         id: req.user.userId
       }
     })
-    console.log(user)
     if (user.role === Role.Tutor) {
       const { username, password } = modifyUserDto
       if (!username) {
@@ -105,7 +104,6 @@ export class UserService {
     const addUserRepoObject = await this.addUserRepoDtoToObject(
       enrollUserToRepoDto
     )
-    console.log(addUserRepoObject)
     try {
       await this.prismaService.userRepo.createMany({
         data: addUserRepoObject

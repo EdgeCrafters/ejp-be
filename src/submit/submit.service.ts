@@ -2,6 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common'
 import { PrismaService } from 'src/prisma/prisma.service'
 import type { ScoreCSVDTO, ScoreDTO } from './dto/score.dto'
 import { unparse } from 'papaparse'
+import { Role } from '@prisma/client'
 
 @Injectable()
 export class SubmitService {
@@ -119,6 +120,18 @@ export class SubmitService {
           include: {
             User: true
           }
+        },
+        Repo: {
+          include: {
+            UserRepo: {
+              where: {
+                user: {
+                  role: Role.Student
+                }
+              },
+              include: { user: true }
+            }
+          }
         }
       }
     })
@@ -129,32 +142,31 @@ export class SubmitService {
 
     const total = problem.testCase.length
 
-    const groupedByUsername = problem.UserTestCase.reduce(
-      (acc, userTestCase) => {
-        const username = userTestCase.User.username
-        if (!acc[username]) {
-          acc[username] = 0
-        }
-        acc[username] += 1
-        return acc
-      },
-      {}
-    )
+    const userpass = {}
+    problem.Repo.UserRepo.map((userrepo) => {
+      userpass[userrepo.user.username] = 0
+    })
 
-    const scores = Object.entries(groupedByUsername).map(
-      ([username, pass]) => ({
-        username,
-        pass: pass as number,
-        total
-      })
-    )
+    console.log(userpass)
 
-    const csv = unparse(scores)
+    problem.UserTestCase.map((userTestCase) => {
+      const username = userTestCase.User.username
+      if (!userpass[username]) {
+        userpass[username] = 0
+      }
+      userpass[username] += 1
+    })
+
+    const scores = Object.entries(userpass).map(([username, pass]) => ({
+      username,
+      pass: pass as number,
+      total
+    }))
 
     const result: ScoreCSVDTO = {
       problemId: problem.id,
       problemName: problem.title,
-      data: csv
+      data: unparse(scores)
     }
 
     return result

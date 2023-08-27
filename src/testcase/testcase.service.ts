@@ -27,6 +27,22 @@ export class TestcaseService {
     }
   }
 
+  async deleteTestcases(id: Array<number>): Promise<number> {
+    try {
+      const deleted = await this.prisma.testCase.deleteMany({
+        where: {
+          id: {
+            in: id
+          }
+        }
+      })
+
+      return deleted.count
+    } catch (error) {
+      throw new BadRequestException('testcaseId is not valid')
+    }
+  }
+
   async getTestcase(testcaseId: number): Promise<TestCase> {
     const testcase = await this.prisma.testCase.findUnique({
       where: {

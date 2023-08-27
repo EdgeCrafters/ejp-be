@@ -1,5 +1,6 @@
 import { Type } from 'class-transformer'
 import {
+  IsArray,
   IsEnum,
   IsInt,
   IsNotEmpty,
@@ -37,3 +38,8 @@ export class TestcaseDto {
   isHidden: TestcaseType
 }
 export class CreateTestcaseDto extends TestcaseDto {}
+
+export class DeleteTestcasesDto {
+  @IsArray()
+  id: Array<number>
+}

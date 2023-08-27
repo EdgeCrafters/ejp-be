@@ -14,9 +14,10 @@ import { TestcaseService } from './testcase.service'
 import { Roles } from 'src/common/decorator/roles.decorator'
 import { Role, type TestCase } from '@prisma/client'
 import { TestcaseGuard } from './guards/testcase.guard'
-import { CreateTestcaseDto } from './dto/testcase.dto'
+import { CreateTestcaseDto, DeleteTestcasesDto } from './dto/testcase.dto'
 import { CommonResponseDto } from 'src/common/dtos/common-response.dto'
 import { AuthenticatedRequest } from 'src/common/interface/authenticated-request.interface'
+import { RepoGuard } from 'src/problem/guards/repo.guard'
 
 @Controller('testcase')
 export class TestcaseController {
@@ -38,6 +39,17 @@ export class TestcaseController {
     @Param('testcaseId', ParseIntPipe) testcaseId: number
   ): Promise<TestCase> {
     return await this.testcaseService.deleteTestcase(testcaseId)
+  }
+
+  @Roles(Role.Tutor)
+  @Delete('all/:repoId')
+  @UseGuards(RepoGuard)
+  async deleteTestcases(
+    @Param('repoId', ParseIntPipe) repoId: number,
+    @Body() testcases: DeleteTestcasesDto
+  ): Promise<number> {
+    console.log(testcases)
+    return await this.testcaseService.deleteTestcases(testcases.id)
   }
 
   @Roles(Role.Tutor)
