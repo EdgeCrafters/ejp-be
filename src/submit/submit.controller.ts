@@ -23,7 +23,6 @@ export class SubmitController {
     @Param('username') username: string,
     @Param('problemId', ParseIntPipe) problemId: number
   ): Promise<ScoreDTO> {
-    console.log(username, problemId)
     return await this.submitService.getScore(username, problemId)
   }
 

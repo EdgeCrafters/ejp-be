@@ -48,7 +48,6 @@ export class ReposService {
 
         await Promise.all(
           repo.Problem.map((value) => {
-            console.log(value)
             this.deleteFile(value.id)
           })
         )
@@ -195,7 +194,6 @@ export class ReposService {
           uuid: true
         }
       })
-      console.log(key)
       await this.minio.removeFile(key.uuid)
       return
     } catch (error) {
