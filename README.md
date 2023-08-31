@@ -15,7 +15,7 @@ EJS-Be is a nestJs-based backend server that enables EJP ecosystem. In order for
 ## Highlights 🌟
 
 - **Container Based**: As long as Docker is installed, the server can be run in any environment..
-- **User adminstration System**: Leverage automated grading scripts to evaluate student submissions.
+- **User adminstration System**: Granting permissions to users for repositories and problems ensures that only users with those specific permissions can access them.
 
 ## Getting Started 📚
 
@@ -53,3 +53,11 @@ EJP-Be is part of the EJP project and follows the same MIT license.
 
 ## HowitWorks
 
+EJP-Be is composed of a total of four containers. EJP-Be, EJP-Minio, and EJP-db communicate through a dedicated container network established using docker-compose.
+
+1. EJP-be   
+2. EJP-db
+EJP-db serves as a PostgreSQL-based database that stores user information, user repository details, and metadata information about problems and repositories.
+3. EJP-minio
+
+4. EJP-minio-mc
