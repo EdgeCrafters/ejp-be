@@ -32,16 +32,24 @@ EJS-Be is a nestJs-based backend server that enables EJP ecosystem. In order for
 2. Navigate to the cloned directory and build ejs-be image.
     ```bash
     cd ejp-be
-    docker build -t ejs-be -f ./builder/dockerfile .
+    docker-compose -f docker-compose.prod.yml build
     ```
+
 
 ### Usage
 
-1. Launch EJP-T from the command line:
+1. run docker-compose container
     ```bash
-    docker run -d ejs-be
+    docker-compose -f docker-compose.prod.yml up -d
     ```
-    
+
+default tutor authentication
+id: tutor01
+password: 1234
+
+default student authentication
+id: student01
+password: 1234
 
 ## Contributing 🤝
 
