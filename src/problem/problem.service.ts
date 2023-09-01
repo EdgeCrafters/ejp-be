@@ -16,6 +16,15 @@ export class ProblemService {
     return await this.prisma.problem.findUniqueOrThrow({
       where: {
         id
+      },
+      include: {
+        testCase: {
+          select: {
+            id: true,
+            isHidden: true,
+            input: true
+          }
+        }
       }
     })
   }
@@ -27,7 +36,15 @@ export class ProblemService {
       },
       select: {
         id: true,
-        title: true
+        title: true,
+        text: true,
+        testCase: {
+          select: {
+            id: true,
+            isHidden: true,
+            input: true
+          }
+        }
       }
     })
   }
