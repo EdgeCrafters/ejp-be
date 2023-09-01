@@ -1,73 +1,71 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+# EJP-BE: Edged Judger Platform Backend Server 🍎
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+EJS-Be is a nestJs-based backend server that enables EJP ecosystem. In order for EJS-S and EJS-T to function properly, instructors need to deploy this server in the environment of their choice. EJS-Be operates within a Docker Engine-based container environment.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## Table of Contents
+- [Highlights 🌟](#highlights-🌟)
+- [Getting Started 📚](#getting-started-📚)
+  - [Prerequisites](#prerequisites)
+  - [Installation](#installation)
+- [How it Works](#HowitWorks)
+- [Contributing 🤝](#contributing-🤝)
+- [License 📄](#license-📄)
 
-## Description
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## Highlights 🌟
 
-## Installation
+- **Container Based**: As long as Docker is installed, the server can be run in any environment..
+- **User adminstration System**: Granting permissions to users for repositories and problems ensures that only users with those specific permissions can access them.
 
-```bash
-$ pnpm install
-```
+## Getting Started 📚
 
-## Running the app
+### Prerequisites
 
-```bash
-# development
-$ pnpm run start
+- Requires Docker Engine installed
 
-# watch mode
-$ pnpm run start:dev
+### Installation
 
-# production mode
-$ pnpm run start:prod
-```
+1. Clone the EJP-Be repository.
+    ```bash
+    git clone https://github.com/EdgeCrafters/ejp-be.git
+    ```
+2. Navigate to the cloned directory and build ejs-be image.
+    ```bash
+    cd ejp-be
+    docker-compose -f docker-compose.prod.yml build
+    ```
 
-## Test
 
-```bash
-# unit tests
-$ pnpm run test
+### Usage
 
-# e2e tests
-$ pnpm run test:e2e
+1. run docker-compose container
+    ```bash
+    docker-compose -f docker-compose.prod.yml up -d
+    ```
 
-# test coverage
-$ pnpm run test:cov
-```
+default tutor authentication
+id: tutor01
+password: 1234
 
-## Support
+default student authentication
+id: student01
+password: 1234
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+## Contributing 🤝
 
-## Stay in touch
+We welcome contributions from the community! Feel free to fork the repository, make your changes, and submit a pull request. For more details, check out our [contribution guidelines](#).
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+## License 📄
 
-## License
+EJP-Be is part of the EJP project and follows the same MIT license.
 
-Nest is [MIT licensed](LICENSE).
+## HowitWorks
+
+EJP-Be is composed of a total of four containers. EJP-Be, EJP-Minio, and EJP-db communicate through a dedicated container network established using docker-compose.
+
+1. EJP-be   
+2. EJP-db
+EJP-db serves as a PostgreSQL-based database that stores user information, user repository details, and metadata information about problems and repositories.
+3. EJP-minio
+
+4. EJP-minio-mc
