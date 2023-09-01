@@ -12,5 +12,5 @@
 !.npmrc
 
 dist
-.env
+!.env
 .env.*
