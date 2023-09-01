@@ -3,6 +3,7 @@
 EJS-Be is a nestJs-based backend server that enables EJP ecosystem. In order for EJS-S and EJS-T to function properly, instructors need to deploy this server in the environment of their choice. EJS-Be operates within a Docker Engine-based container environment.
 
 ## Table of Contents
+
 - [Highlights 🌟](#highlights-🌟)
 - [Getting Started 📚](#getting-started-📚)
   - [Prerequisites](#prerequisites)
@@ -10,7 +11,6 @@ EJS-Be is a nestJs-based backend server that enables EJP ecosystem. In order for
 - [How it Works](#HowitWorks)
 - [Contributing 🤝](#contributing-🤝)
 - [License 📄](#license-📄)
-
 
 ## Highlights 🌟
 
@@ -26,22 +26,21 @@ EJS-Be is a nestJs-based backend server that enables EJP ecosystem. In order for
 ### Installation
 
 1. Clone the EJP-Be repository.
-    ```bash
-    git clone https://github.com/EdgeCrafters/ejp-be.git
-    ```
+   ```bash
+   git clone https://github.com/EdgeCrafters/ejp-be.git
+   ```
 2. Navigate to the cloned directory and build ejs-be image.
-    ```bash
-    cd ejp-be
-    docker-compose -f docker-compose.prod.yml build
-    ```
-
+   ```bash
+   cd ejp-be
+   docker-compose -f docker-compose.prod.yml build
+   ```
 
 ### Usage
 
 1. run docker-compose container
-    ```bash
-    docker-compose -f docker-compose.prod.yml up -d
-    ```
+   ```bash
+   docker-compose -f docker-compose.prod.yml up -d
+   ```
 
 default tutor authentication
 id: tutor01
@@ -63,9 +62,9 @@ EJP-Be is part of the EJP project and follows the same MIT license.
 
 EJP-Be is composed of a total of four containers. EJP-Be, EJP-Minio, and EJP-db communicate through a dedicated container network established using docker-compose.
 
-1. EJP-be   
+1. EJP-be
 2. EJP-db
-EJP-db serves as a PostgreSQL-based database that stores user information, user repository details, and metadata information about problems and repositories.
+   EJP-db serves as a PostgreSQL-based database that stores user information, user repository details, and metadata information about problems and repositories.
 3. EJP-minio
 
 4. EJP-minio-mc
