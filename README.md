@@ -31,7 +31,7 @@ EJS-Be is a nestJs-based backend server that enables EJP ecosystem. In order for
    ```
 2. Navigate to the cloned directory and build ejs-be image.
    ```bash
-   cd ejp-be
+   cd ejp-be && git checkout ejp-deploy (use deploy branch)
    docker-compose -f docker-compose.prod.yml build
    ```
 
