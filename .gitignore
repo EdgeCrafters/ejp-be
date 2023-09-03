@@ -2,7 +2,7 @@
 /dist
 /node_modules
 .pnpm-store
-.env
+
 
 #minio config
 .minio.sys

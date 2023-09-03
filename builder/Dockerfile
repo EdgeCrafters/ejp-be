@@ -12,8 +12,6 @@ RUN pnpm install
 RUN npx prisma generate
 RUN npm run build
 
-EXPOSE 4000
-
 ### PRODUCTION ###
 FROM node:18-alpine
 
