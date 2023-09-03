@@ -24,9 +24,9 @@ services:
     container_name: ejp-minio
     image: minio/minio
     command: server /data --console-address ":9001"
-    ports:
-      - 9000:9000
-      - 9001:9001
+    expose:
+     - '9001'
+     - '9000'
     environment:
       MINIO_ROOT_USER: skku-ejs
       MINIO_ROOT_PASSWORD: 12345678
@@ -35,9 +35,11 @@ services:
     container_name: ejp-minio-mc
     image: minio/mc
     restart: on-failure
+    depends_on:
+     - minio
     entrypoint: >
       /bin/sh -c "
-      /usr/bin/mc alias set myminio http://EJP-minio:9000 skku-ejs 12345678;
+      /usr/bin/mc alias set myminio http://ejp-minio:9000 skku-ejs 12345678;
       /usr/bin/mc mb myminio/test;
       /usr/bin/mc policy set public myminio/test;
       "
