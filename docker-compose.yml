@@ -19,7 +19,7 @@ services:
 
   dev-db:
     container_name: skku-ejs-dev-db
-    image: postgres:14-alpine
+    image: postgres:16-alpine
     ports:
       - 5434:5432
     environment:
